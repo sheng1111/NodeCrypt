@@ -14,7 +14,9 @@ import {
 	escapeHTML
 } from './util.string.js';
 import {
-	$id
+	$id,
+	createElement,
+	on
 } from './util.dom.js';
 import {
 	closeSettingsPanel
@@ -25,6 +27,8 @@ import {
 import {
 	updateChatInputStyle
 } from './chat.js';
+
+let activeActionModal = null;
 
 // Utility functions for security and error handling
 // 安全與錯誤處理工具函式
@@ -160,6 +164,68 @@ function handleExitAction() {
 		// Force reload as fallback
 		location.reload();
 	}
+}
+
+// Show action modal
+// 顯示動作提示視窗
+export function showActionModal({
+	title,
+	body,
+	actionText,
+	cancelText,
+	onAction,
+	onCancel
+}) {
+	if (activeActionModal) {
+		activeActionModal.remove();
+		activeActionModal = null;
+	}
+
+	const modal = createElement('div', { class: 'action-modal' });
+	const bg = createElement('div', { class: 'action-modal-bg' });
+	const card = createElement('div', { class: 'action-modal-card' });
+	const titleEl = createElement('div', { class: 'action-modal-title' });
+	const bodyEl = createElement('div', { class: 'action-modal-body' });
+	const actions = createElement('div', { class: 'action-modal-actions' });
+	const primaryBtn = createElement('button', { class: 'action-modal-btn action-modal-btn-primary', type: 'button' });
+
+	titleEl.textContent = title || '';
+	bodyEl.textContent = body || '';
+	primaryBtn.textContent = actionText || '';
+
+	const closeModal = (shouldCancel) => {
+		if (!activeActionModal) return;
+		activeActionModal.remove();
+		activeActionModal = null;
+		if (shouldCancel && typeof onCancel === 'function') {
+			onCancel();
+		}
+	};
+
+	on(primaryBtn, 'click', () => {
+		if (typeof onAction === 'function') {
+			onAction();
+		}
+		closeModal(false);
+	});
+
+	if (cancelText) {
+		const cancelBtn = createElement('button', { class: 'action-modal-btn action-modal-btn-ghost', type: 'button' });
+		cancelBtn.textContent = cancelText;
+		on(cancelBtn, 'click', () => closeModal(true));
+		actions.appendChild(cancelBtn);
+	}
+
+	actions.appendChild(primaryBtn);
+	card.appendChild(titleEl);
+	card.appendChild(bodyEl);
+	card.appendChild(actions);
+	modal.appendChild(bg);
+	modal.appendChild(card);
+	document.body.appendChild(modal);
+	activeActionModal = modal;
+
+	on(bg, 'click', () => closeModal(true));
 }
 
 // Render the main header

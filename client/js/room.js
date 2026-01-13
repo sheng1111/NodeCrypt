@@ -33,6 +33,8 @@ export function getNewRoomData() {
 		userMap: {},
 		myId: null,
 		myUserName: '',
+		joinedAt: 0,
+		duplicateNameBlocked: false,
 		chat: null,
 		messages: [],
 		prevUserList: [],
@@ -99,6 +101,7 @@ export function joinRoom(userName, roomName, password, modal = null, onResult) {
 	newRd.roomName = roomName;
 	newRd.myUserName = userName;
 	newRd.password = password;
+	newRd.joinedAt = Date.now();
 	roomsData.push(newRd);
 	const idx = roomsData.length - 1;
 	switchRoom(idx);
@@ -109,6 +112,25 @@ export function joinRoom(userName, roomName, password, modal = null, onResult) {
 	const callbacks = {
 		onServerClosed: () => {
 			setStatus('Node connection closed');
+			if (onResult && !closed) {
+				closed = true;
+				onResult(false)
+			}
+		},
+		onServerKeyMismatch: () => {
+			addSystemMsg(t('system.server_key_mismatch', '伺服器公鑰已變更，已拒絕連線。請清除瀏覽器釘選後再重試。'));
+			if (typeof window.showActionModal === 'function') {
+				window.showActionModal({
+					title: t('modal.server_key_title', '連線已被阻擋'),
+					body: t('modal.server_key_body', '伺服器公鑰已變更，需清除釘選才能重新連線。'),
+					actionText: t('action.clear_pinned_key', '清除釘選並重試'),
+					cancelText: t('action.dismiss', '稍後'),
+					onAction: () => {
+						localStorage.removeItem('nodecrypt_server_key');
+						window.location.reload();
+					}
+				});
+			}
 			if (onResult && !closed) {
 				closed = true;
 				onResult(false)
@@ -175,6 +197,16 @@ export function handleClientList(idx, list, selfId) {
 export function handleClientSecured(idx, user) {
 	const rd = roomsData[idx];
 	if (!rd) return;
+	const incomingName = user.userName || user.username || user.name || '';
+	if (!rd.duplicateNameBlocked && incomingName && rd.myUserName && incomingName === rd.myUserName) {
+		const isRecentJoin = rd.joinedAt && (Date.now() - rd.joinedAt) < 20000;
+		if (isRecentJoin) {
+			rd.duplicateNameBlocked = true;
+			addSystemMsg(t('system.duplicate_name', '此暱稱已在房間內，請改用其他名稱。'));
+			exitRoom();
+			return;
+		}
+	}
 	rd.userMap[user.clientId] = user;
 	const existingUserIndex = rd.userList.findIndex(u => u.clientId === user.clientId);
 	if (existingUserIndex === -1) {

@@ -6,6 +6,23 @@ import {
 	createElement
 } from './util.dom.js';
 
+const WEBP_SUPPORTED = (() => {
+	try {
+		const canvas = document.createElement('canvas');
+		if (!canvas.getContext) return false;
+		return canvas.toDataURL('image/webp').startsWith('data:image/webp');
+	} catch (error) {
+		return false;
+	}
+})();
+
+function getOutputDataUrl(canvas) {
+	if (WEBP_SUPPORTED) {
+		return canvas.toDataURL('image/webp', 0.90);
+	}
+	return canvas.toDataURL('image/png');
+}
+
 // Process and compress image file
 // 處理並壓縮圖片檔案
 export async function processImage(file, callback) {
@@ -32,9 +49,9 @@ export async function processImage(file, callback) {
 		const ctx = canvas.getContext('2d');
 		ctx.drawImage(img, 0, 0, w, h);
 		let dataUrl;
-		// Export as webp with 90% quality
-		// 匯出為 webp，90% 品質
-		dataUrl = canvas.toDataURL('image/webp', 0.90);
+		// Export with WebP when supported, otherwise fallback to PNG
+		// 優先使用 WebP，不支援時改用 PNG
+		dataUrl = getOutputDataUrl(canvas);
 		callback(dataUrl)
 	};
 	// Read file as data URL

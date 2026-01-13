@@ -2,9 +2,11 @@
 // 匯入必要的模組
 import { deflate, inflate } from 'fflate';
 import { showFileUploadModal } from './util.fileUpload.js';
+import { processImage } from './util.image.js';
 
 // 分卷大小統一配置
 const DEFAULT_VOLUME_SIZE = 256 * 1024; // 512KB
+const IMAGE_INLINE_MAX_SIZE = 8 * 1024 * 1024;
 
 // File transfer state management
 // 檔案傳輸狀態管理
@@ -376,10 +378,32 @@ export function setupFileSend({
 // 處理檔案上傳
 async function handleFilesUpload(files, onSend) {
 	if (!files || files.length === 0) return;
-	
-	const fileId = generateFileId();
+
+	const allImages = files.every(file => file.type && file.type.startsWith('image/'));
+	const canInlineImages = allImages && files.every(file => file.size <= IMAGE_INLINE_MAX_SIZE);
 	
 	try {
+		if (canInlineImages) {
+			const images = [];
+			for (const file of files) {
+				const dataUrl = await new Promise((resolve) => {
+					processImage(file, resolve);
+				});
+				if (dataUrl) images.push(dataUrl);
+			}
+			if (images.length > 0) {
+				onSend({
+					type: 'image',
+					data: {
+						text: '',
+						images
+					}
+				});
+				return;
+			}
+		}
+
+		const fileId = generateFileId();
 		// Show compression progress
 		let progressElement = null;
 		

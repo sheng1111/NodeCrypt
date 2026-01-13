@@ -95,6 +95,9 @@ const LANGUAGES = {
 			'action.copy_not_supported': 'Copy not supported in this environment',
 			'action.action_failed': 'Action failed. Please try again.',
 			'action.cannot_share': 'Cannot share:',
+			'action.dismiss': 'Dismiss',
+			'action.reconnect': 'Reconnect',
+			'action.clear_pinned_key': 'Clear pinned key and retry',
 			
 			// System messages
 			'system.security_warning': '⚠️ This link uses an old format. Room data is not encrypted.',
@@ -105,6 +108,17 @@ const LANGUAGES = {
 			'system.private_message_failed': 'Cannot send private message to',
 			'system.private_file_failed': 'Cannot send private file to',
 			'system.user_not_connected': 'User might not be fully connected.',
+			'system.server_key_mismatch': 'Server public key changed. Connection blocked. Clear pinned key and retry.',
+			'system.pwa_background_notice': 'PWA may pause the connection in the background. Return to the foreground to reconnect.',
+			'system.pwa_foreground_notice': 'Back in the foreground.',
+			'system.pwa_foreground_reconnect': 'Back in the foreground, reconnecting now.',
+			'system.duplicate_name': 'This username is already in the room. Please use a different name.',
+
+			// Modal messages
+			'modal.server_key_title': 'Connection blocked',
+			'modal.server_key_body': 'The server public key changed. Clear the pinned key to reconnect.',
+			'modal.pwa_reconnect_title': 'Connection paused',
+			'modal.pwa_reconnect_body': 'The app may lose connection in the background. Reconnect to continue.',
 			
 			// Help page
 			'help.title': 'User Guide',
@@ -236,6 +250,9 @@ const LANGUAGES = {
 			'action.copy_not_supported': '此環境不支援複製功能',
 			'action.action_failed': '操作失敗，請重試。',
 			'action.cannot_share': '無法分享：',
+			'action.dismiss': '稍後',
+			'action.reconnect': '重新連線',
+			'action.clear_pinned_key': '清除釘選並重試',
 			
 			// System messages
 			'system.security_warning': '⚠️ 此連結使用舊格式，房間資料未加密。',
@@ -246,6 +263,17 @@ const LANGUAGES = {
 			'system.private_message_failed': '無法傳送私訊給',
 			'system.private_file_failed': '無法傳送私密檔案給',
 			'system.user_not_connected': '使用者可能未完全連線。',
+			'system.server_key_mismatch': '伺服器公鑰已變更，已拒絕連線。請清除釘選後再重試。',
+			'system.pwa_background_notice': 'PWA 在背景可能暫停連線，回到前景會自動重新連線。',
+			'system.pwa_foreground_notice': '已回到前景。',
+			'system.pwa_foreground_reconnect': '已回到前景，正在重新連線。',
+			'system.duplicate_name': '此暱稱已在房間內，請改用其他名稱。',
+
+			// Modal messages
+			'modal.server_key_title': '連線已被阻擋',
+			'modal.server_key_body': '伺服器公鑰已變更，需清除釘選才能重新連線。',
+			'modal.pwa_reconnect_title': '連線已暫停',
+			'modal.pwa_reconnect_body': 'PWA 在背景可能中斷連線，建議重新連線。',
 			
 			// Help page
 			'help.title': '使用說明',

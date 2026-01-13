@@ -74,6 +74,7 @@ import {	renderUserList,       // 渲染使用者清單 / Render user list
 	preventSpaceInput,    // 防止輸入空格 / Prevent space input in form fields
 	loginFormHandler,     // 登入表單提交處理器 / Login form handler
 	openLoginModal,       // 開啟登入視窗 / Open login modal
+	showActionModal,      // 顯示動作提示視窗 / Show action modal
 	setupTabs,            // 設定頁面標籤切換 / Setup tab switching
 	autofillRoomPwd,      // 自動填入房間密碼 / Autofill room password
 	generateLoginForm,    // 生成登入表單HTML / Generate login form HTML
@@ -103,6 +104,7 @@ window.notifyMessage = notifyMessage;
 window.setupEmojiPicker = setupEmojiPicker;
 window.handleFileMessage = handleFileMessage;
 window.downloadFile = downloadFile;
+window.showActionModal = showActionModal;
 
 // 當 DOM 內容載入完成後執行初始化邏輯
 // Run initialization logic when the DOM content is fully loaded
@@ -151,6 +153,58 @@ window.addEventListener('DOMContentLoaded', () => {
 	// updateStaticTexts(); // 在初始化設定後更新靜態文字 / Update static texts after initializing settings
 	initTheme(); // 初始化主題 / Initialize theme
 	initPwa();
+
+	const isStandalone = () => {
+		return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+	};
+	let lastBackgroundNotice = 0;
+	let lastForegroundNotice = 0;
+	let lastReconnectPrompt = 0;
+
+	const requestReconnect = () => {
+		const rd = roomsData[activeRoomIndex];
+		if (!rd || !rd.chat) return;
+		const chat = rd.chat;
+		if (chat && typeof chat.isOpen === 'function' && chat.isOpen()) return;
+		if (typeof chat.connect === 'function') {
+			chat.connect();
+		}
+	};
+	window.requestReconnect = requestReconnect;
+
+	document.addEventListener('visibilitychange', () => {
+		if (!isStandalone()) return;
+		if (activeRoomIndex < 0 || !roomsData[activeRoomIndex]) return;
+
+		const now = Date.now();
+		if (document.hidden) {
+			if (now - lastBackgroundNotice > 30000) {
+				addSystemMsg(t('system.pwa_background_notice', 'PWA 在背景可能暫停連線，回到前景會自動重新連線。'));
+				lastBackgroundNotice = now;
+			}
+			return;
+		}
+
+		if (now - lastForegroundNotice <= 30000) return;
+		const rd = roomsData[activeRoomIndex];
+		const chat = rd && rd.chat;
+		if (chat && typeof chat.isOpen === 'function' && !chat.isOpen()) {
+			addSystemMsg(t('system.pwa_foreground_reconnect', '已回到前景，正在重新連線。'));
+			if (now - lastReconnectPrompt > 30000 && typeof window.showActionModal === 'function') {
+				window.showActionModal({
+					title: t('modal.pwa_reconnect_title', '連線已暫停'),
+					body: t('modal.pwa_reconnect_body', 'PWA 在背景可能中斷連線，建議重新連線。'),
+					actionText: t('action.reconnect', '重新連線'),
+					cancelText: t('action.dismiss', '稍後'),
+					onAction: requestReconnect
+				});
+				lastReconnectPrompt = now;
+			}
+		} else {
+			addSystemMsg(t('system.pwa_foreground_notice', '已回到前景。'));
+		}
+		lastForegroundNotice = now;
+	});
 	
 	const settingsBtn = $id('settings-btn'); // 設定按鈕 / Settings button
 	if (settingsBtn) {
@@ -294,6 +348,34 @@ window.addEventListener('DOMContentLoaded', () => {
 			if (rd && rd.chat) {
 				const userName = rd.myUserName || '';
 				const msgWithUser = { ...message, userName };
+				if (msgWithUser.type === 'image') {
+					const imageData = msgWithUser.data || { text: '', images: [] };
+					if (rd.privateChatTargetId) {
+						const targetClient = rd.chat.channel[rd.privateChatTargetId];
+						if (targetClient && targetClient.shared) {
+							const clientMessagePayload = {
+								a: 'm',
+								t: 'image_private',
+								d: imageData
+							};
+							const encryptedClientMessage = rd.chat.encryptClientMessage(clientMessagePayload, targetClient.shared);
+							const serverRelayPayload = {
+								a: 'c',
+								p: encryptedClientMessage,
+								c: rd.privateChatTargetId
+							};
+							const encryptedMessageForServer = rd.chat.encryptServerMessage(serverRelayPayload, rd.chat.serverShared);
+							rd.chat.sendMessage(encryptedMessageForServer);
+							addMsg(imageData, false, 'image_private');
+						} else {
+							addSystemMsg(`${t('system.private_message_failed', 'Cannot send private message to')} ${rd.privateChatTargetName}. ${t('system.user_not_connected', 'User might not be fully connected.')}`)
+						}
+					} else {
+						rd.chat.sendChannelMessage('image', imageData);
+						addMsg(imageData, false, 'image');
+					}
+					return;
+				}
 				if (rd.privateChatTargetId) {
 					// 私訊檔案加密並傳送
 					// Encrypt and send private file message
