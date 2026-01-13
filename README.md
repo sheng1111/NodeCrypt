@@ -171,6 +171,23 @@ sequenceDiagram
 - **使用最新版本的現代瀏覽器**：確保密碼學 API 的安全性與效能
 - **Cloudflare Zero Trust**：可用 Access 限制入口，但需允許 WebSocket 連線，避免阻擋即時通訊
 
+### Cloudflare Zero Trust（Access）加入方式
+以下以綁定自訂網域的 Workers 部署為例：
+
+1. 在 Cloudflare Zero Trust 後台建立 Access Application：
+   - Applications → Add an application → Self-hosted
+   - Application domain 設為你的聊天網域（例如 `chat.example.com`）
+2. 到 Application Settings 開啟 WebSocket 支援：
+   - Advanced → Enable WebSockets
+3. 設定 Access Policies：
+   - 建議先用 `Allow` + `Email` 或 `Group` 測試
+   - 若要公開測試，可用 `Bypass` 對特定 IP 或路徑
+4. 確認 DNS 與路由：
+   - Cloudflare DNS 指向 Workers（自訂網域或路由）
+   - `wrangler.toml` 的 `routes`/`workers_dev` 需與實際網域一致
+
+完成後用瀏覽器開啟聊天網域，應先看到 Access 驗證頁，通過後即可正常進入聊天室並使用 WebSocket。
+
 ## 🤝 安全貢獻
 
 歡迎安全研究者回報漏洞與進行安全審計。嚴重安全問題將在 24 小時內修復。
@@ -191,4 +208,3 @@ sequenceDiagram
 **NodeCrypt** - 真正的端對端加密通訊 🔐
 
 *"在數位時代，加密是保護隱私的最後一道防線"*
-
