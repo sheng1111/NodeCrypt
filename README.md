@@ -7,12 +7,12 @@
 ### 方法一：一鍵部署到 Cloudflare Workers
 
 點擊下方按鈕即可一鍵部署到 Cloudflare Workers：
-[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button?projectName=NodeCrypt)](https://deploy.workers.cloudflare.com/?url=https://github.com/shuaiplus/NodeCrypt)
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button?projectName=NodeCrypt)](https://deploy.workers.cloudflare.com/?url=https://github.com/sheng1111/NodeCrypt.git)
 
 - 建置命令：npm run build
 - 部署命令：npm run deploy
 
-> 注意：此方式會基於主倉庫建立新專案，後續主倉庫更新不會自動同步（專案已成型，很少更新，可直接使用方法一）。
+> 注意：此方式會基於指定的 GitHub 倉庫建立新專案，後續倉庫更新不會自動同步。
 
 ### 方法二：自動同步 fork 並部署（推薦長期維護）
 1. 先 fork 本專案到你的 GitHub 帳號。
@@ -21,7 +21,18 @@
 - 建置命令：npm run build
 - 部署命令：npm run deploy
 
-> 本專案已內建自動同步 workflow，fork 後無需任何操作，主倉庫更新會自動同步到你的 fork 倉庫，Cloudflare 也會自動重新部署，無需手動維護。
+> 若要自動部署，請參考下方 CI/CD 章節設定 GitHub Actions 與 Cloudflare 金鑰。
+
+### CI/CD：GitHub Actions 自動部署到 Cloudflare Workers
+1. 在 GitHub 倉庫新增 Secrets：
+   - CF_API_TOKEN：Cloudflare API Token（需有 Workers 編輯權限）
+   - CF_ACCOUNT_ID：Cloudflare 帳號 ID
+2. 視需要更新 wrangler.toml 的 
+ame，避免與既有 Worker 名稱衝突。
+3. 推送到 main 後，GitHub Actions 會自動執行 
+pm run build 與 
+pm run deploy。
+
 
 ### 方法三：Docker 一鍵部署（不穩定，不建議）
 
@@ -180,3 +191,4 @@ sequenceDiagram
 **NodeCrypt** - 真正的端對端加密通訊 🔐
 
 *"在數位時代，加密是保護隱私的最後一道防線"*
+
