@@ -1,8 +1,8 @@
-// Simple i18n utility for NodeCrypt
-// NodeCrypt 简单国际化工具
+﻿// Simple i18n utility for NodeCrypt
+// NodeCrypt 簡易國際化工具
 
 // Language definitions
-// 语言定义
+// 語言定義
 const LANGUAGES = {
 	en: {
 		code: 'en',
@@ -49,7 +49,8 @@ const LANGUAGES = {
 			'file.selected_files': 'Selected Files',
 			'file.clear_all': 'Clear All',
 			'file.cancel': 'Cancel',
-			'file.send_files': 'Send Files',			'file.sending': 'Sending',
+			'file.send_files': 'Send Files',
+			'file.sending': 'Sending',
 			'file.receiving': 'Receiving',
 			'file.files': 'files',
 			'file.total': 'Total',
@@ -69,6 +70,17 @@ const LANGUAGES = {
 			'notification.image': '[image]',
 			'notification.private': '(Private)',
 			
+			// PWA
+			'pwa.update_title': 'Update available',
+			'pwa.update_body': 'A new version is ready. Refresh to update.',
+			'pwa.update_action': 'Update now',
+			'pwa.update_dismiss': 'Not now',
+			'pwa.install_title': 'Install NodeCrypt',
+			'pwa.install_body': 'Add to your home screen for faster access and offline support.',
+			'pwa.install_action': 'Install',
+			'pwa.offline_title': 'Offline ready',
+			'pwa.offline_body': 'You can continue using the app without a network connection.',
+			
 			// Actions and menu
 			'action.share': 'Share',
 			'action.exit': 'Exit',
@@ -83,7 +95,8 @@ const LANGUAGES = {
 			'action.copy_not_supported': 'Copy not supported in this environment',
 			'action.action_failed': 'Action failed. Please try again.',
 			'action.cannot_share': 'Cannot share:',
-					// System messages
+			
+			// System messages
 			'system.security_warning': '⚠️ This link uses an old format. Room data is not encrypted.',
 			'system.file_send_failed': 'Failed to send files:',
 			'system.joined': 'joined the conversation',
@@ -92,11 +105,13 @@ const LANGUAGES = {
 			'system.private_message_failed': 'Cannot send private message to',
 			'system.private_file_failed': 'Cannot send private file to',
 			'system.user_not_connected': 'User might not be fully connected.',
-					// Help page
+			
+			// Help page
 			'help.title': 'User Guide',
 			'help.back_to_login': 'Back to Login',
 			'help.usage_guide': 'User Guide',
-			'help.what_is_nodecrypt': '🔐 What is NodeCrypt?',			'help.what_is_nodecrypt_desc': 'NodeCrypt is a true zero-knowledge end-to-end encrypted chat system. With a database-free architecture, all messages are encrypted locally on your device, and the server serves only as an encrypted data relay station, unable to access any of your plaintext content.',
+			'help.what_is_nodecrypt': '🔐 What is NodeCrypt?',
+			'help.what_is_nodecrypt_desc': 'NodeCrypt is a true zero-knowledge end-to-end encrypted chat system. With a database-free architecture, all messages are encrypted locally on your device, and the server serves only as an encrypted data relay station, unable to access any of your plaintext content.',
 			'help.how_to_start': '🚀 Quick Start',
 			'help.step_username': 'Enter Username',
 			'help.step_username_desc': 'Choose a display name for the room, can be any name you like',
@@ -106,7 +121,8 @@ const LANGUAGES = {
 			'help.step_password_desc': 'Used to distinguish different rooms while participating in encryption process to enhance security',
 			'help.step_join': 'Click "Join Room"',
 			'help.step_join_desc': 'System will automatically generate encryption keys and start secure chatting',
-			'help.security_features': '🔑 Security Features',			'help.e2e_encryption': '🛡️ End-to-End Encryption',
+			'help.security_features': '🔑 Security Features',
+			'help.e2e_encryption': '🛡️ End-to-End Encryption',
 			'help.e2e_encryption_desc': 'Uses AES-256 + ECDH encryption algorithm, messages can only be decrypted by you and the recipient',
 			'help.password_enhanced_encryption': '🔐 Password Enhanced Encryption',
 			'help.password_enhanced_encryption_desc': 'Node password directly participates in encryption key generation, providing additional security protection layer',
@@ -115,7 +131,8 @@ const LANGUAGES = {
 			'help.anonymous_communication': '🎭 Complete Anonymity',
 			'help.anonymous_communication_desc': 'No account registration required, no personal information collected',
 			'help.decentralized': '🌐 Decentralized',
-			'help.decentralized_desc': 'Supports self-hosted deployment, server does not participate in encryption/decryption process',			'help.usage_tips': '💡 Usage Tips',
+			'help.decentralized_desc': 'Supports self-hosted deployment, server does not participate in encryption/decryption process',
+			'help.usage_tips': '💡 Usage Tips',
 			'help.important_note': '⚠️ Important Note',
 			'help.room_isolation_note': 'Same node name but different passwords are two completely independent rooms that cannot communicate with each other.',
 			'help.tip_private_chat': 'Private Chat',
@@ -130,138 +147,153 @@ const LANGUAGES = {
 	},
 	zh: {
 		code: 'zh',
-		name: '中文',
-		flag: '🇨🇳',
+		name: '繁體中文',
+		flag: '🇹🇼',
 		translations: {
 			// Meta tags for SEO
-			'meta.description': 'NodeCrypt - 真正的端到端加密聊天系统，无数据库，所有消息本地加密，服务器仅做加密数据中转，支持 Cloudflare Workers、Docker、自托管和本地开发。',
-			'meta.keywords': '端到端加密, 安全, 聊天, WebSocket, Cloudflare Workers, JavaScript, E2EE, 匿名通信, AES, ECDH, RSA, ChaCha20, 安全, 开源, NodeCrypt, shuaiplus',
-			'meta.og_title': 'NodeCrypt - 端到端加密聊天系统',
-			'meta.og_description': 'NodeCrypt 是一个端到端加密的开源聊天系统，所有加密解密均在客户端本地完成，服务器无法获取明文。支持多平台部署，安全、匿名、无历史消息。',
-			'meta.twitter_title': 'NodeCrypt - 端到端加密聊天系统',
-			'meta.twitter_description': 'NodeCrypt 是一个端到端加密的开源聊天系统，所有加密解密均在客户端本地完成，服务器无法获取明文。',
+			'meta.description': 'NodeCrypt - 真正的端對端加密聊天系統，無資料庫，所有訊息本地加密，伺服器僅作為加密資料中繼，支援 Cloudflare Workers、Docker、自託管與本地開發。',
+			'meta.keywords': '端對端加密, 安全, 聊天, WebSocket, Cloudflare Workers, JavaScript, E2EE, 匿名通訊, AES, ECDH, RSA, ChaCha20, 安全, 開源, NodeCrypt, shuaiplus',
+			'meta.og_title': 'NodeCrypt - 端對端加密聊天系統',
+			'meta.og_description': 'NodeCrypt 是一個端對端加密的開源聊天系統，所有加密解密均在用戶端本地完成，伺服器無法取得明文。支援多平台部署，安全、匿名、無歷史訊息。',
+			'meta.twitter_title': 'NodeCrypt - 端對端加密聊天系統',
+			'meta.twitter_description': 'NodeCrypt 是一個端對端加密的開源聊天系統，所有加密解密均在用戶端本地完成，伺服器無法取得明文。',
 			
 			// Login and main UI
-			'ui.enter_node': '进入新的节点',
-			'ui.username': '用户名',
-			'ui.node_name': '节点名称',
-			'ui.node_password': '节点密码',
-			'ui.optional': '（可选）',
-			'ui.enter': '确定',
-			'ui.connecting': '连接中...',
-			'ui.node_exists': '此节点已存在',
-			'ui.my_name': '我的名字',
-			'ui.members': '在线成员',
-			'ui.message': '消息',
-			'ui.private_message_to': '私信给',
+			'ui.enter_node': '進入新的節點',
+			'ui.username': '使用者名稱',
+			'ui.node_name': '節點名稱',
+			'ui.node_password': '節點密碼',
+			'ui.optional': '（可選）',
+			'ui.enter': '確定',
+			'ui.connecting': '連線中...',
+			'ui.node_exists': '此節點已存在',
+			'ui.my_name': '我的名稱',
+			'ui.members': '線上成員',
+			'ui.message': '訊息',
+			'ui.private_message_to': '私訊給',
 			'ui.me': '（我）',
-			'ui.anonymous': '匿名用户',
-			'ui.start_private_chat': '选择用户开始私信',
+			'ui.anonymous': '匿名使用者',
+			'ui.start_private_chat': '選擇使用者開始私訊',
 			
 			// Settings panel
-			'settings.title': '设置',
-			'settings.notification': '通知设置',
-			'settings.theme': '主题设置',
-			'settings.language': '语言设置',
+			'settings.title': '設定',
+			'settings.notification': '通知設定',
+			'settings.theme': '主題設定',
+			'settings.language': '語言設定',
 			'settings.desktop_notifications': '桌面通知',
-			'settings.sound_notifications': '声音通知',
-			'settings.language_switch': '语言',
-			'settings.chinese': '中文',
+			'settings.sound_notifications': '聲音通知',
+			'settings.language_switch': '語言',
+			'settings.chinese': '繁體中文',
 			'settings.english': 'English',
 			
 			// File upload and transfer
-			'file.selected_files': '已选择的文件',
-			'file.clear_all': '清空所有',
+			'file.selected_files': '已選擇的檔案',
+			'file.clear_all': '清空全部',
 			'file.cancel': '取消',
-			'file.send_files': '发送文件',			'file.sending': '发送中',
+			'file.send_files': '傳送檔案',
+			'file.sending': '傳送中',
 			'file.receiving': '接收中',
-			'file.files': '个文件',
-			'file.total': '总计',
-			'file.files_selected': '选中 {count} 个文件，总计 {size}',
-			'file.upload_files': '上传文件',
-			'file.attach_file': '附加文件',
-			'file.no_password_required': '无需密码',
-			'file.drag_drop': '拖拽文件到此处',
+			'file.files': '個檔案',
+			'file.total': '總計',
+			'file.files_selected': '已選 {count} 個檔案，總計 {size}',
+			'file.upload_files': '上傳檔案',
+			'file.attach_file': '附加檔案',
+			'file.no_password_required': '不需密碼',
+			'file.drag_drop': '拖曳檔案到此處',
 			'file.or': '或',
-			'file.browse_files': '浏览文件',
+			'file.browse_files': '瀏覽檔案',
 			
 			// Notifications and messages
-			'notification.enabled': '通知已启用',
-			'notification.alert_here': '您将在此处收到通知。',
-			'notification.not_supported': '您的浏览器不支持通知功能。',
-			'notification.allow_browser': '请在浏览器设置中允许通知。',
-			'notification.image': '[图片]',
-			'notification.private': '（私信）',
+			'notification.enabled': '通知已啟用',
+			'notification.alert_here': '您會在此收到通知。',
+			'notification.not_supported': '您的瀏覽器不支援通知功能。',
+			'notification.allow_browser': '請在瀏覽器設定中允許通知。',
+			'notification.image': '[圖片]',
+			'notification.private': '（私訊）',
+			
+			// PWA
+			'pwa.update_title': '已有新版本',
+			'pwa.update_body': '新版本已準備就緒，重新整理即可更新。',
+			'pwa.update_action': '立即更新',
+			'pwa.update_dismiss': '稍後',
+			'pwa.install_title': '安裝 NodeCrypt',
+			'pwa.install_body': '加入主畫面，開啟更快並支援離線。',
+			'pwa.install_action': '安裝',
+			'pwa.offline_title': '已支援離線模式',
+			'pwa.offline_body': '您可以在沒有網路連線時繼續使用應用程式。',
 			
 			// Actions and menu
 			'action.share': '分享',
 			'action.exit': '退出',
 			'action.emoji': '表情',
-			'action.settings': '设置',
+			'action.settings': '設定',
 			'action.back': '返回',
-			'action.copied': '已复制到剪贴板！',
-			'action.share_copied': '分享链接已复制！',
-			'action.copy_failed': '复制失败，文本：',
-			'action.copy_url_failed': '复制失败，链接：',
-			'action.nothing_to_copy': '没有内容可复制',
-			'action.copy_not_supported': '此环境不支持复制功能',
-			'action.action_failed': '操作失败，请重试。',
-			'action.cannot_share': '无法分享：',
-					// System messages
-			'system.security_warning': '⚠️ 此链接使用旧格式，房间数据未加密。',
-			'system.file_send_failed': '文件发送失败：',
-			'system.joined': '加入了对话',
-			'system.left': '离开了对话',
-			'system.secured': '已建立端到端安全连接',
-			'system.private_message_failed': '无法发送私信给',
-			'system.private_file_failed': '无法发送私密文件给',
-			'system.user_not_connected': '用户可能未完全连接。',
+			'action.copied': '已複製到剪貼簿！',
+			'action.share_copied': '分享連結已複製！',
+			'action.copy_failed': '複製失敗，文字：',
+			'action.copy_url_failed': '複製失敗，連結：',
+			'action.nothing_to_copy': '沒有內容可複製',
+			'action.copy_not_supported': '此環境不支援複製功能',
+			'action.action_failed': '操作失敗，請重試。',
+			'action.cannot_share': '無法分享：',
+			
+			// System messages
+			'system.security_warning': '⚠️ 此連結使用舊格式，房間資料未加密。',
+			'system.file_send_failed': '檔案傳送失敗：',
+			'system.joined': '加入了對話',
+			'system.left': '離開了對話',
+			'system.secured': '已建立點對點安全連線',
+			'system.private_message_failed': '無法傳送私訊給',
+			'system.private_file_failed': '無法傳送私密檔案給',
+			'system.user_not_connected': '使用者可能未完全連線。',
 			
 			// Help page
-			'help.title': '使用说明',
-			'help.back_to_login': '返回登录',
-			'help.usage_guide': '使用说明',
-			'help.what_is_nodecrypt': '🔐 什么是 NodeCrypt？',			'help.what_is_nodecrypt_desc': 'NodeCrypt 是一个真正的端到端加密聊天系统。采用无数据库架构，所有消息在您的设备上本地加密，服务器仅作为加密数据的中转站，无法获取您的任何明文内容。',
-			'help.how_to_start': '🚀 快速开始',
-			'help.step_username': '输入用户名',
-			'help.step_username_desc': '选择一个在房间中显示的昵称，可以是任何您喜欢的名称',
-			'help.step_node_name': '设置节点名',
-			'help.step_node_name_desc': '房间的唯一标识符，相当于房间号',
-			'help.step_password': '设置节点密码',
-			'help.step_password_desc': '用于区分不同房间，同时参与加密过程，提升安全性',
-			'help.step_join': '点击"加入房间"',
-			'help.step_join_desc': '系统将自动生成加密密钥，开始安全聊天',
+			'help.title': '使用說明',
+			'help.back_to_login': '返回登入',
+			'help.usage_guide': '使用說明',
+			'help.what_is_nodecrypt': '🔐 什麼是 NodeCrypt？',
+			'help.what_is_nodecrypt_desc': 'NodeCrypt 是一個真正的端對端加密聊天系統。採用無資料庫架構，所有訊息在您的裝置上本地加密，伺服器僅作為加密資料的中繼站，無法取得您的任何明文內容。',
+			'help.how_to_start': '🚀 快速開始',
+			'help.step_username': '輸入使用者名稱',
+			'help.step_username_desc': '選擇一個在房間中顯示的暱稱，可以是任何您喜歡的名稱',
+			'help.step_node_name': '設定節點名稱',
+			'help.step_node_name_desc': '房間的唯一識別碼，相當於房號',
+			'help.step_password': '設定節點密碼',
+			'help.step_password_desc': '用於區分不同房間，同時參與加密流程，提升安全性',
+			'help.step_join': '點擊「加入房間」',
+			'help.step_join_desc': '系統將自動生成加密金鑰，開始安全聊天',
 			'help.security_features': '🔑 安全特性',
-			'help.e2e_encryption': '🛡️ 端到端加密',
-			'help.e2e_encryption_desc': '使用 AES-256 + ECDH 加密算法，消息仅您和接收者可解密',
-			'help.password_enhanced_encryption': '🔐 密码增强加密',
-			'help.password_enhanced_encryption_desc': '节点密码直接参与加密密钥生成，提供额外的安全保护层',
-			'help.no_history': '🚫 零历史记录',
-			'help.no_history_desc': '所有消息仅存在于当前会话，离线用户无法获取历史消息',
+			'help.e2e_encryption': '🛡️ 端對端加密',
+			'help.e2e_encryption_desc': '使用 AES-256 + ECDH 加密演演算法，訊息只有您和接收者可解密',
+			'help.password_enhanced_encryption': '🔐 密碼增強加密',
+			'help.password_enhanced_encryption_desc': '節點密碼直接參與加密金鑰生成，提供額外的安全保護層',
+			'help.no_history': '🚫 零歷史紀錄',
+			'help.no_history_desc': '所有訊息僅存在於目前會話，離線使用者無法取得歷史訊息',
 			'help.anonymous_communication': '🎭 完全匿名',
-			'help.anonymous_communication_desc': '无需注册账户，不收集任何个人信息',
+			'help.anonymous_communication_desc': '無需註冊帳號，不收集任何個人資訊',
 			'help.decentralized': '🌐 去中心化',
-			'help.decentralized_desc': '支持自托管部署，服务器不参与加密解密过程',			'help.usage_tips': '💡 使用技巧',
+			'help.decentralized_desc': '支援自託管部署，伺服器不參與加密解密流程',
+			'help.usage_tips': '💡 使用技巧',
 			'help.important_note': '⚠️ 重要提示',
-			'help.room_isolation_note': '相同节点名但不同密码的是两个完全独立的房间，无法相互通信。',
-			'help.tip_private_chat': '私人对话',
-			'help.tip_private_chat_desc': '使用复杂的节点名和密码，只分享给特定人员',
+			'help.room_isolation_note': '相同節點名稱但不同密碼的是兩個完全獨立的房間，無法相互通訊。',
+			'help.tip_private_chat': '私人聊天',
+			'help.tip_private_chat_desc': '使用複雜的節點名稱和密碼，只分享給特定人員',
 			'help.tip_group_chat': '群聊',
-			'help.tip_group_chat_desc': '使用简单易记的节点名和密码，方便多人加入',
+			'help.tip_group_chat_desc': '使用簡單易記的節點名稱和密碼，方便多人加入',
 			'help.tip_security_reminder': '安全提醒',
-			'help.tip_security_reminder_desc': '节点名和密码都需要完全一致才能进入同一个房间',
-			'help.tip_password_strategy': '密码策略',
-			'help.tip_password_strategy_desc': '建议使用包含字母、数字和符号的强密码',
+			'help.tip_security_reminder_desc': '節點名稱和密碼都需要完全一致才能進入同一個房間',
+			'help.tip_password_strategy': '密碼策略',
+			'help.tip_password_strategy_desc': '建議使用包含字母、數字和符號的強密碼',
 		}
 	}
 };
 
 // Current language
-// 当前语言
+// 目前語言
 let currentLanguage = 'en';
 
 // Get translation for a key
-// 获取翻译文本
+// 取得翻譯文字
 export function t(key, fallback = key) {
 	const lang = LANGUAGES[currentLanguage];
 	if (lang && lang.translations && lang.translations[key]) {
@@ -271,34 +303,35 @@ export function t(key, fallback = key) {
 }
 
 // Set current language
-// 设置当前语言
+// 設定目前語言
 export function setLanguage(langCode) {
 	if (LANGUAGES[langCode]) {
 		currentLanguage = langCode;
 		// Update document language attribute
-		// 更新文档语言属性
-		document.documentElement.lang = langCode;
+		// 更新檔案語言屬性
+		const htmlLang = langCode === 'zh' ? 'zh-TW' : langCode;
+		document.documentElement.lang = htmlLang;
 		
 		// Update static HTML texts
-		// 更新HTML中的静态文本
+		// 更新 HTML 中的靜態文字
 		updateStaticTexts();
 		
 		// Dispatch language change event for other components to listen
-		// 派发语言变更事件供其他组件监听
-		window.dispatchEvent(new CustomEvent('languageChange', { 
-			detail: { language: langCode } 
+		// 派發語言變更事件供其他元件監聽
+		window.dispatchEvent(new CustomEvent('languageChange', {
+			detail: { language: langCode }
 		}));
 	}
 }
 
 // Get current language
-// 获取当前语言
+// 取得目前語言
 export function getCurrentLanguage() {
 	return currentLanguage;
 }
 
 // Get all available languages
-// 获取所有可用语言
+// 取得所有可用語言
 export function getAvailableLanguages() {
 	return Object.keys(LANGUAGES).map(code => ({
 		code,
@@ -308,20 +341,20 @@ export function getAvailableLanguages() {
 }
 
 // Initialize i18n with settings
-// 根据设置初始化国际化
+// 根據設定初始化國際化
 export function initI18n(settings) {
 	if (settings && settings.language) {
 		setLanguage(settings.language);
 	} else {
 		// Auto-detect browser language
-		// 自动检测浏览器语言
+		// 自動偵測瀏覽器語言
 		const browserLang = detectBrowserLanguage();
 		setLanguage(browserLang);
 	}
 }
 
 // Detect browser language and return supported language code
-// 检测浏览器语言并返回支持的语言代码
+// 偵測瀏覽器語言並回傳支援的語言代碼
 function detectBrowserLanguage() {
 	const navigatorLang = navigator.language || navigator.userLanguage || 'en';
 	
@@ -338,9 +371,9 @@ function detectBrowserLanguage() {
 }
 
 // Update static HTML text elements
-// 更新HTML中的静态文本元素
+// 更新 HTML 中的靜態文字元素
 export function updateStaticTexts() {
-	// 如果DOM还没准备好，等待DOM准备好再更新
+	// 如果 DOM 還沒準備好，等待 DOM 準備好再更新
 	if (document.readyState === 'loading') {
 		document.addEventListener('DOMContentLoaded', () => updateStaticTexts());
 		return;
@@ -351,11 +384,12 @@ export function updateStaticTexts() {
 	if (loginTitle) {
 		loginTitle.textContent = t('ui.enter_node', 'Enter a Node');
 	}
-		// Update login form content with new translations
+	
+	// Update login form content with new translations
 	const loginFormContainer = document.getElementById('login-form');
 	if (loginFormContainer) {
 		// Use a custom event to trigger form regeneration instead of dynamic import
-		// 使用自定义事件触发表单重新生成，而不是动态导入
+		// 使用自訂事件觸發表單重新生成，而不是動態匯入
 		window.dispatchEvent(new CustomEvent('regenerateLoginForm'));
 	}
 	
@@ -363,10 +397,11 @@ export function updateStaticTexts() {
 	const sidebarUsername = document.getElementById('sidebar-username');
 	if (sidebarUsername) {
 		// Use a custom event to update sidebar username instead of dynamic import
-		// 使用自定义事件更新侧边栏用户名，而不是动态导入
+		// 使用自訂事件更新側邊欄使用者名稱，而不是動態匯入
 		window.dispatchEvent(new CustomEvent('updateSidebarUsername'));
 	}
-		// Update "Enter a Node" text in sidebar
+	
+	// Update "Enter a Node" text in sidebar
 	const joinRoomText = document.getElementById('join-room-text');
 	if (joinRoomText) {
 		joinRoomText.textContent = t('ui.enter_node', 'Enter a Node');
@@ -401,13 +436,15 @@ export function updateStaticTexts() {
 	if (emojiBtn) {
 		emojiBtn.title = t('action.emoji', 'Emoji');
 	}
-		// Update settings button title
+	
+	// Update settings button title
 	const settingsBtn = document.getElementById('settings-btn');
 	if (settingsBtn) {
 		settingsBtn.title = t('action.settings', 'Settings');
 		settingsBtn.setAttribute('aria-label', t('action.settings', 'Settings'));
 	}
-		// Update back button title
+	
+	// Update back button title
 	const backBtn = document.getElementById('settings-back-btn');
 	if (backBtn) {
 		backBtn.title = t('action.back', 'Back');
@@ -415,7 +452,7 @@ export function updateStaticTexts() {
 	}
 	
 	// Update all elements with data-i18n attribute
-	// 更新所有具有data-i18n属性的元素
+	// 更新所有具有 data-i18n 屬性的元素
 	const i18nElements = document.querySelectorAll('[data-i18n]');
 	i18nElements.forEach(element => {
 		const key = element.getAttribute('data-i18n');
@@ -425,7 +462,7 @@ export function updateStaticTexts() {
 	});
 	
 	// Update all elements with data-i18n-title attribute
-	// 更新所有具有data-i18n-title属性的元素
+	// 更新所有具有 data-i18n-title 屬性的元素
 	const i18nTitleElements = document.querySelectorAll('[data-i18n-title]');
 	i18nTitleElements.forEach(element => {
 		const key = element.getAttribute('data-i18n-title');
@@ -435,12 +472,12 @@ export function updateStaticTexts() {
 	});
 	
 	// Update meta tags
-	// 更新meta标签
+	// 更新 meta 標籤
 	updateMetaTags();
 }
 
 // Update meta tags with current language
-// 使用当前语言更新meta标签
+// 使用目前語言更新 meta 標籤
 function updateMetaTags() {
 	// Update description meta tag
 	const metaDescription = document.querySelector('meta[name="description"]');

@@ -1,13 +1,13 @@
 {
   "name": "nodecrypt",
   "version": "1.0.0",
-  "description": "端到端加密节点",
+  "description": "端對端加密聊天系統",
   "main": "worker/index.js",
   "scripts": {
     "build": "vite build",
-    "dev": " wrangler dev",
-    "deploy": " wrangler deploy",
-    "publish": " wrangler publish",
+    "dev": "npm run build && wrangler dev",
+    "deploy": "wrangler deploy",
+    "publish": "wrangler publish",
     "build:docker": "vite build"
   },
   "repository": {
@@ -25,7 +25,8 @@
     "autoprefixer": "^10.4.21",
     "cssnano": "^7.0.7",
     "terser": "^5.39.2",
-    "vite": "^6.3.5",
+    "vite": "^6.4.1",
+    "vite-plugin-pwa": "^1.2.0",
     "wrangler": "^4.16.1"
   },
   "dependencies": {

@@ -1,12 +1,12 @@
 // Import DOM helpers
-// 导入 DOM 辅助函数
+// 匯入 DOM 輔助函式
 import {
 	$,
 	on
 } from './util.dom.js';
 import 'emoji-picker-element';
 // Add emoji picker styles to document
-// 向文档添加 emoji 选择器样式
+// 向文件新增 emoji 選擇器樣式
 const addEmojiPickerStyles = () => {
 	if (document.querySelector('#emoji-picker-styles')) return;
 	const style = document.createElement('style');
@@ -15,7 +15,7 @@ const addEmojiPickerStyles = () => {
 	document.head.appendChild(style)
 };
 // Setup emoji picker for chat input
-// 为聊天输入框设置 emoji 选择器
+// 為聊天輸入框設定 emoji 選擇器
 export function setupEmojiPicker({
 	btnSelector = '.chat-emoji-btn',
 	inputSelector = '.input-message-input'
@@ -32,7 +32,7 @@ export function setupEmojiPicker({
 		btn.parentNode.style.position = 'relative';
 		btn.parentNode.appendChild(picker);
 		// Emoji click event
-		// 监听 emoji 点击事件
+		// 監聽 emoji 點擊事件
 		picker.addEventListener('emoji-click', event => {
 			insertEmoji(input, event.detail.unicode);
 			hidePickerWithAnimation();
@@ -40,8 +40,8 @@ export function setupEmojiPicker({
 		
 		function showPickerWithAnimation() {
 			picker.style.display = 'block';
-			// 强制触发重绘，然后添加打开动画
-			picker.offsetHeight; // 强制重绘
+			// 強制觸發重繪，然後新增開啟動畫
+			picker.offsetHeight; // 強制重繪
 			picker.classList.add('show');
 		}
 		
@@ -53,7 +53,7 @@ export function setupEmojiPicker({
 		}
 		
 		// Button click toggles picker
-		// 按钮点击切换选择器显示
+		// 按鈕點擊切換選擇器顯示
 		on(btn, 'click', (ev) => {
 			ev.stopPropagation();
 			if (picker.style.display === 'none') {
@@ -63,7 +63,7 @@ export function setupEmojiPicker({
 			}
 		});
 		// Hide picker when clicking outside
-		// 点击外部隐藏选择器
+		// 點擊外部隐藏選擇器
 		on(document, 'click', (ev) => {
 			if (!picker.contains(ev.target) && ev.target !== btn) {
 		hidePickerWithAnimation();
@@ -74,7 +74,7 @@ export function setupEmojiPicker({
 	}
 }
 // Insert emoji into input at cursor
-// 在光标处插入 emoji 到输入框
+// 在光标处插入 emoji 到輸入框
 function insertEmoji(input, emoji) {
 	input.focus();
 	if (document.getSelection && window.getSelection) {

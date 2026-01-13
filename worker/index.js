@@ -4,7 +4,7 @@ export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
 
-    // 处理WebSocket请求
+    // 處理WebSocket請求
     const upgradeHeader = request.headers.get('Upgrade');
     if (upgradeHeader && upgradeHeader === 'websocket') {
       const id = env.CHAT_ROOM.idFromName('chat-room');
@@ -12,13 +12,13 @@ export default {
       return stub.fetch(request);
     }
 
-    // 处理API请求
+    // 處理API請求
     if (url.pathname.startsWith('/api/')) {
-      // ...API 逻辑...
+      // ...API 邏輯...
       return new Response(JSON.stringify({ ok: true }), { headers: { "Content-Type": "application/json" } });
     }
 
-    // 其余全部交给 ASSETS 处理（自动支持 hash 文件名和 SPA fallback）
+    // 其餘全部交給 ASSETS 處理（自動支援 hash 檔名和 SPA fallback）
     return env.ASSETS.fetch(request);
   }
 };
@@ -55,7 +55,7 @@ export class ChatRoom {  constructor(state, env) {
           ['sign', 'verify']
         );
 
-        // 并行导出公钥和私钥以提高性能
+        // 並行匯出公鑰和私鑰以提升效能
         const [publicKeyBuffer, privateKeyBuffer] = await Promise.all([
           crypto.subtle.exportKey('spki', keyPair.publicKey),
           crypto.subtle.exportKey('pkcs8', keyPair.privateKey)
@@ -64,7 +64,7 @@ export class ChatRoom {  constructor(state, env) {
         stored = {
           rsaPublic: btoa(String.fromCharCode(...new Uint8Array(publicKeyBuffer))),
           rsaPrivateData: Array.from(new Uint8Array(privateKeyBuffer)),
-          createdAt: Date.now() // 记录密钥创建时间，用于后续判断是否需要轮换
+          createdAt: Date.now() // 紀錄金鑰建立時間，用於後續判斷是否需要輪換
         };
         
         await this.state.storage.put('rsaKeyPair', stored);
@@ -87,16 +87,16 @@ export class ChatRoom {  constructor(state, env) {
         );      }
         this.keyPair = stored;
       
-      // 检查密钥是否需要轮换（如果已创建超过24小时）
+      // 檢查金鑰是否需要輪換（如果已建立超過24小時）
       if (stored.createdAt && (Date.now() - stored.createdAt > 24 * 60 * 60 * 1000)) {
-        // 如果没有任何客户端，则执行密钥轮换
+        // 如果沒有任何用戶端，則執行金鑰輪換
         if (Object.keys(this.clients).length === 0) {
-          console.log('密钥已使用24小时，进行轮换...');
+          console.log('金鑰已使用24小時，進行輪換...');
           await this.state.storage.delete('rsaKeyPair');
           this.keyPair = null;
           await this.initRSAKeyPair();
         } else {
-          // 否则标记需要在客户端全部断开后进行轮换
+          // 否則標記需要在用戶端全部斷開後進行輪換
           await this.state.storage.put('pendingKeyRotation', true);
         }
       }
@@ -131,7 +131,7 @@ export class ChatRoom {  constructor(state, env) {
   }  // WebSocket connection event handler
   async handleSession(connection) {    connection.accept();
 
-    // 清理旧连接
+    // 清理舊連線
     await this.cleanupOldConnections();
 
     const clientId = generateClientId();
@@ -363,13 +363,13 @@ export class ChatRoom {  constructor(state, env) {
     
     try {
       const channel = this.clients[clientId].channel;
-      // 过滤有效的目标成员
+      // 過濾有效的目標成員
       const validMembers = Object.keys(decrypted.p).filter(member => {
         const targetClient = this.clients[member];
         return isString(decrypted.p[member]) && this.isClientInChannel(targetClient, channel);
       });
 
-      // 处理所有有效的目标成员
+      // 處理所有有效的目標成員
       for (const member of validMembers) {
         const targetClient = this.clients[member];
         const messageObj = {
@@ -441,19 +441,19 @@ export class ChatRoom {  constructor(state, env) {
     }
   }
   
-  // 连接清理方法
+  // 連線清理方法
   async cleanupOldConnections() {
     const seenThreshold = getTime() - this.config.seenTimeout;
     const clientsToRemove = [];
 
-    // 先收集需要移除的客户端，避免在迭代时修改对象
+    // 先收集需要移除的用戶端，避免在迭代時修改物件
     for (const clientId in this.clients) {
       if (this.clients[clientId].seen < seenThreshold) {
         clientsToRemove.push(clientId);
       }
     }
 
-    // 然后一次性移除所有过期客户端
+    // 然後一次性移除所有過期用戶端
     for (const clientId of clientsToRemove) {
       try {
         logEvent('connection-seen', clientId, 'debug');
@@ -463,17 +463,17 @@ export class ChatRoom {  constructor(state, env) {
         logEvent('connection-seen', error, 'error');      }
     }
     
-    // 如果没有任何客户端和房间，检查是否需要轮换密钥
+    // 如果沒有任何用戶端和房間，檢查是否需要輪換金鑰
     if (Object.keys(this.clients).length === 0 && Object.keys(this.channels).length === 0) {
       const pendingRotation = await this.state.storage.get('pendingKeyRotation');
       if (pendingRotation) {
-        console.log('没有活跃客户端或房间，执行密钥轮换...');
+        console.log('沒有活躍用戶端或房間，執行金鑰輪換...');
         await this.state.storage.delete('rsaKeyPair');        await this.state.storage.delete('pendingKeyRotation');
         this.keyPair = null;
         await this.initRSAKeyPair();
       }
     }
     
-    return clientsToRemove.length; // 返回清理的连接数量
+    return clientsToRemove.length; // 回傳清理的連線數量
   }
 }

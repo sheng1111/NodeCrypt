@@ -1,5 +1,5 @@
-// File upload modal and batch processing utilities
-// 文件上传模态框和批量处理工具
+﻿// File upload modal and batch processing utilities
+// 檔案上傳對話框與批次處理工具
 
 import {
 	$,
@@ -13,14 +13,14 @@ import { formatFileSize } from './util.file.js';
 import { t } from './util.i18n.js';
 
 // File upload modal state
-// 文件上传模态框状态
+// 檔案上傳對話框狀態
 let uploadModal = null;
 let selectedFiles = new Map();
 let fileIdCounter = 0;
 let onSendCallback = null;
 
 // Listen for language changes to update modal text
-// 监听语言变更以更新模态框文本
+// 監聽語言變更以更新對話框文字
 window.addEventListener('languageChange', () => {
 	if (uploadModal) {
 		updateModalTexts();
@@ -28,7 +28,7 @@ window.addEventListener('languageChange', () => {
 });
 
 // Update modal texts when language changes
-// 语言切换时更新模态框文本
+// 語言切換時更新對話框文字
 function updateModalTexts() {
 	if (!uploadModal) return;
 	
@@ -79,28 +79,30 @@ function updateModalTexts() {
 	
 	// Update summary if files are selected
 	if (selectedFiles.size > 0) {
-		updateFileListDisplay();
+		updateFileList();
 	}
 }
 
 // Generate unique file ID
-// 生成唯一文件ID
+// 生成唯一檔案 ID
 function generateFileId() {
 	return 'upload_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 }
 
 // Create file upload modal
-// 创建文件上传模态框
+// 建立檔案上傳對話框
 function createUploadModal() {
 	const modal = createElement('div', {
 		class: 'file-upload-modal'
 	}, `
-		<div class="file-upload-overlay"></div>		<div class="file-upload-container">
+		<div class="file-upload-overlay"></div>
+		<div class="file-upload-container">
 			<div class="file-upload-header">
 				<h3>${t('file.upload_files', 'Upload Files')}</h3>
 				<button class="file-upload-close">&times;</button>
 			</div>
-			<div class="file-upload-content">				<div class="file-drop-zone" id="file-drop-zone">
+			<div class="file-upload-content">
+				<div class="file-drop-zone" id="file-drop-zone">
 					<div class="file-drop-icon">📁</div>
 					<div class="file-drop-text">
 						<p><strong>${t('file.drag_drop', 'Drag and drop files here')}</strong></p>
@@ -128,7 +130,7 @@ function createUploadModal() {
 }
 
 // Show file upload modal
-// 显示文件上传模态框
+// 顯示檔案上傳對話框
 export function showFileUploadModal(onSend) {
 	if (uploadModal) {
 		document.body.removeChild(uploadModal);
@@ -149,7 +151,7 @@ export function showFileUploadModal(onSend) {
 }
 
 // Hide file upload modal
-// 隐藏文件上传模态框
+// 隱藏檔案上傳對話框
 function hideUploadModal() {
 	if (!uploadModal) return;
 	
@@ -162,13 +164,13 @@ function hideUploadModal() {
 		selectedFiles.clear();
 		onSendCallback = null;
 		
-		// 通知主模块重置拖拽标志位
+		// 通知主模組重置拖曳標誌位
 		window.dispatchEvent(new CustomEvent('fileUploadModalClosed'));
 	}, 300);
 }
 
 // Setup modal event listeners
-// 设置模态框事件监听器
+// 設定對話框事件監聽器
 function setupModalEvents() {
 	if (!uploadModal) return;
 
@@ -206,8 +208,16 @@ function setupModalEvents() {
 	on(document, 'drop', (e) => e.preventDefault());
 }
 
+// Handle browse button click (for regenerated content)
+// 處理瀏覽按鈕點擊（針對重新生成的內容）
+function handleBrowseClick() {
+	if (!uploadModal) return;
+	const fileInput = $('#file-upload-input', uploadModal);
+	if (fileInput) fileInput.click();
+}
+
 // Handle file input change
-// 处理文件输入变化
+// 處理檔案輸入變化
 function handleFileInputChange(e) {
 	const files = Array.from(e.target.files);
 	addFiles(files);
@@ -215,7 +225,7 @@ function handleFileInputChange(e) {
 }
 
 // Handle drag over
-// 处理拖拽悬停
+// 處理拖曳懸停
 function handleDragOver(e) {
 	e.preventDefault();
 	e.stopPropagation();
@@ -223,7 +233,7 @@ function handleDragOver(e) {
 }
 
 // Handle drag leave
-// 处理拖拽离开
+// 處理拖曳離開
 function handleDragLeave(e) {
 	e.preventDefault();
 	e.stopPropagation();
@@ -231,7 +241,7 @@ function handleDragLeave(e) {
 }
 
 // Handle drop
-// 处理文件拖放
+// 處理檔案拖放
 function handleDrop(e) {
 	e.preventDefault();
 	e.stopPropagation();
@@ -242,7 +252,7 @@ function handleDrop(e) {
 }
 
 // Add files to selection
-// 添加文件到选择列表
+// 新增檔案到選擇清單
 function addFiles(files) {
 	files.forEach(file => {
 		const fileId = generateFileId();
@@ -254,7 +264,7 @@ function addFiles(files) {
 }
 
 // Remove file from selection
-// 从选择列表中移除文件
+// 從選擇清單中移除檔案
 function removeFile(fileId) {
 	selectedFiles.delete(fileId);
 	updateFileList();
@@ -262,7 +272,7 @@ function removeFile(fileId) {
 }
 
 // Clear all files
-// 清空所有文件
+// 清空所有檔案
 function clearAllFiles() {
 	selectedFiles.clear();
 	updateFileList();
@@ -270,7 +280,7 @@ function clearAllFiles() {
 }
 
 // Update file list display
-// 更新文件列表显示
+// 更新檔案清單顯示
 function updateFileList() {
 	if (!uploadModal) return;
 
@@ -311,7 +321,8 @@ function updateFileList() {
 			e.preventDefault();
 			removeFile(fileId);
 		});
-	}	// Update summary
+	}
+	// Update summary
 	const totalSize = Array.from(selectedFiles.values()).reduce((sum, file) => sum + file.size, 0);
 	const summaryText = t('file.files_selected', '{count} files selected, {size} total')
 		.replace('{count}', selectedFiles.size)
@@ -320,7 +331,7 @@ function updateFileList() {
 }
 
 // Update send button state
-// 更新发送按钮状态
+// 更新傳送按鈕狀態
 function updateSendButton() {
 	if (!uploadModal) return;
 
@@ -329,7 +340,7 @@ function updateSendButton() {
 }
 
 // Handle send files
-// 处理发送文件
+// 處理傳送檔案
 async function handleSendFiles() {
 	if (selectedFiles.size === 0 || !onSendCallback) return;
 
@@ -351,7 +362,7 @@ async function handleSendFiles() {
 }
 
 // Handle keyboard events
-// 处理键盘事件
+// 處理鍵盤事件
 on(document, 'keydown', (e) => {
 	if (!uploadModal) return;
 	

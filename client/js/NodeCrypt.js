@@ -1,5 +1,5 @@
 ﻿// NodeCrypt core cryptographic client for secure chat
-// NodeCrypt 安全聊天的核心加密客户端
+// NodeCrypt 安全聊天的核心加密用戶端
 
 import {
 	sha256
@@ -17,10 +17,10 @@ import {
 window.Buffer = Buffer;
 
 // Main NodeCrypt class for secure communication
-// 用于安全通信的 NodeCrypt 主类
+// 用於安全通訊的 NodeCrypt 主類
 class NodeCrypt {
 	// Initialize NodeCrypt instance
-	// 初始化 NodeCrypt 实例
+	// 初始化 NodeCrypt 實例
 	constructor(config = {}, callbacks = {}) {
 		this.config = {
 			rsaPublic: config.rsaPublic || '',
@@ -35,6 +35,7 @@ class NodeCrypt {
 			onClientSecured: callbacks.onClientSecured || null,
 			onClientList: callbacks.onClientList || null,
 			onClientMessage: callbacks.onClientMessage || null,
+			onServerKeyMismatch: callbacks.onServerKeyMismatch || null,
 		};
 		this.SERVER_KEY_STORAGE = 'nodecrypt_server_key';
 		try {
@@ -73,7 +74,7 @@ class NodeCrypt {
 	}
 
 	// Set user credentials (username, channel, password)
-	// 设置用户凭证（用户名、频道、密码）
+	// 設定使用者憑證（使用者名稱、頻道、密碼）
 	setCredentials(username, channel, password) {
 		this.logEvent('setCredentials');
 		try {
@@ -90,7 +91,7 @@ class NodeCrypt {
 	}
 
 	// Connect to the server
-	// 连接到服务器
+	// 連線到伺服器
 	connect() {
 		if (!this.credentials) {
 			return (false)
@@ -115,7 +116,7 @@ class NodeCrypt {
 	}
 
 	// Clean up and disconnect
-	// 清理并断开连接
+	// 清理並斷開連線
 	destruct() {
 		this.logEvent('destruct');
 		this.stopReconnect();
@@ -134,6 +135,7 @@ class NodeCrypt {
 		this.callbacks.onClientSecured = null;
 		this.callbacks.onClientList = null;
 		this.callbacks.onClientMessage = null;
+		this.callbacks.onServerKeyMismatch = null;
 		this.clientEc = null;
 		this.serverKeys = null;
 		this.serverShared = null;
@@ -158,7 +160,7 @@ class NodeCrypt {
 	}
 
 	// WebSocket open event handler
-	// WebSocket 连接打开事件处理
+	// WebSocket 連線開啟事件處理
 	async onOpen() {
 		this.logEvent('onOpen');
 		this.startPing();
@@ -175,7 +177,7 @@ class NodeCrypt {
 	}
 
 	// WebSocket message event handler
-	// WebSocket 消息事件处理
+	// WebSocket 訊息事件處理
 	async onMessage(event) {
 		if (!event || !this.isString(event.data)) {
 			return
@@ -189,6 +191,7 @@ class NodeCrypt {
 			if (data.type === 'server-key') {
 				const result = await this.handleServerKey(data.key);
 				if (!result) {
+					this.disconnect();
 					return
 				}
 			}
@@ -299,7 +302,9 @@ class NodeCrypt {
 						c: serverDecrypted.c
 					}, this.serverShared))
 				}
-				this.channel[serverDecrypted.c].shared = Buffer.from(this.xorHex(this.channel[serverDecrypted.c].keys.derive(this.clientEc.keyFromPublic(serverDecrypted.p, 'hex').getPublic()).toString('hex').padEnd(64, '8').substr(0, 64), this.credentials.password), 'hex');
+				const sharedSecretHex = this.channel[serverDecrypted.c].keys.derive(this.clientEc.keyFromPublic(serverDecrypted.p, 'hex').getPublic()).toString('hex').padStart(64, '0');
+				const sharedKeyHex = sha256.hmac(this.credentials.password, sharedSecretHex);
+				this.channel[serverDecrypted.c].shared = Buffer.from(sharedKeyHex, 'hex');
 				this.sendMessage(this.encryptServerMessage({
 					a: 'c',
 					p: this.encryptClientMessage({
@@ -354,7 +359,7 @@ class NodeCrypt {
 	}
 
 	// WebSocket error event handler
-	// WebSocket 错误事件处理
+	// WebSocket 錯誤事件處理
 	async onError(event) {
 		this.logEvent('onError', event, 'error');
 		this.disconnect();
@@ -371,7 +376,7 @@ class NodeCrypt {
 	}
 
 	// WebSocket close event handler
-	// WebSocket 关闭事件处理
+	// WebSocket 關閉事件處理
 	async onClose(event) {
 		this.logEvent('onClose', event);
 		this.disconnect();
@@ -388,7 +393,7 @@ class NodeCrypt {
 	}
 
 	// Log events for debugging
-	// 记录事件日志用于调试
+	// 紀錄事件日誌用於除錯
 	logEvent(source, message, level) {
 		if (this.config.debug) {
 			const date = new Date(),
@@ -398,19 +403,19 @@ class NodeCrypt {
 	}
 
 	// Check if connection is open
-	// 检查连接是否已打开
+	// 檢查連線是否已開啟
 	isOpen() {
 		return (this.connection && this.connection.readyState && this.connection.readyState === WebSocket.OPEN ? true : false)
 	}
 
 	// Check if connection is closed
-	// 检查连接是否已关闭
+	// 檢查連線是否已關閉
 	isClosed() {
 		return (!this.connection || !this.connection.readyState || this.connection.readyState === WebSocket.CLOSED ? true : false)
 	}
 
 	// Start reconnect timer
-	// 启动重连定时器
+	// 啟動重連定時器
 	startReconnect() {
 		this.stopReconnect();
 		this.logEvent('startReconnect');
@@ -421,7 +426,7 @@ class NodeCrypt {
 	}
 
 	// Stop reconnect timer
-	// 停止重连定时器
+	// 停止重連定時器
 	stopReconnect() {
 		if (this.reconnect) {
 			this.logEvent('stopReconnect');
@@ -431,7 +436,7 @@ class NodeCrypt {
 	}
 
 	// Start ping timer
-	// 启动心跳定时器
+	// 啟動心跳定時器
 	startPing() {
 		this.stopPing();
 		this.logEvent('startPing');
@@ -441,7 +446,7 @@ class NodeCrypt {
 	}
 
 	// Stop ping timer
-	// 停止心跳定时器
+	// 停止心跳定時器
 	stopPing() {
 		if (this.ping) {
 			this.logEvent('stopPing');
@@ -451,7 +456,7 @@ class NodeCrypt {
 	}
 
 	// Disconnect from server
-	// 从服务器断开连接
+	// 從伺服器斷開連線
 	disconnect() {
 		this.stopReconnect();
 		this.stopPing();
@@ -466,7 +471,7 @@ class NodeCrypt {
 	}
 
 	// Send a message to the server
-	// 向服务器发送消息
+	// 向伺服器傳送訊息
 	sendMessage(message) {
 		try {
 			if (this.isOpen()) {
@@ -480,7 +485,7 @@ class NodeCrypt {
 	}
 
 	// Send a message to all channels
-	// 向所有频道发送消息
+	// 向所有頻道傳送訊息
 	sendChannelMessage(type, data) {
 		if (this.serverShared) {
 			try {
@@ -516,7 +521,7 @@ class NodeCrypt {
 	}
 
 	// Encrypt a message for the server
-	// 加密发送给服务器的消息
+	// 加密傳送給伺服器的訊息
 	encryptServerMessage(message, key) {
 		let encrypted = '';
 		try {
@@ -526,7 +531,9 @@ class NodeCrypt {
 			}
 			const iv = Buffer.from(crypto.getRandomValues(new Uint8Array(16)));
 			const cipher = new ModeOfOperation.cbc(key, iv);
-			encrypted = iv.toString('base64') + '|' + Buffer.from(cipher.encrypt(message)).toString('base64')
+			const payload = iv.toString('base64') + '|' + Buffer.from(cipher.encrypt(message)).toString('base64');
+			const mac = sha256.hmac(this.getMacKey(key), payload);
+			encrypted = payload + '|' + mac;
 		} catch (error) {
 			this.logEvent('encryptServerMessage', error, 'error')
 		}
@@ -534,11 +541,20 @@ class NodeCrypt {
 	}
 
 	// Decrypt a message from the server
-	// 解密来自服务器的消息
+	// 解密來自伺服器的訊息
 	decryptServerMessage(message, key) {
 		let decrypted = {};
 		try {
 			const parts = message.split('|');
+			if (parts.length !== 3) {
+				return (decrypted)
+			}
+			const payload = parts[0] + '|' + parts[1];
+			const mac = sha256.hmac(this.getMacKey(key), payload);
+			if (mac !== parts[2]) {
+				this.logEvent('decryptServerMessage', 'hmac-mismatch', 'error');
+				return (decrypted)
+			}
 			const decipher = new ModeOfOperation.cbc(key, Buffer.from(parts[0], 'base64'));
 			decrypted = JSON.parse(Buffer.from(decipher.decrypt(Buffer.from(parts[1], 'base64'))).toString('utf8').replace(/\0+$/, ''))
 		} catch (error) {
@@ -548,7 +564,7 @@ class NodeCrypt {
 	}
 
 	// Encrypt a message for a client
-	// 加密发送给客户端的消息
+	// 加密傳送給用戶端的訊息
 	encryptClientMessage(message, key) {
 		let encrypted = '';
 		try {
@@ -558,8 +574,11 @@ class NodeCrypt {
 			}
 			const iv = Buffer.from(crypto.getRandomValues(new Uint8Array(12)));
 			const counter = Buffer.from(crypto.getRandomValues(new Uint8Array(4)));
-			const cipher = new chacha(key, iv, counter.reduce((a, b) => a * b));
-			encrypted = iv.toString('base64') + '|' + counter.toString('base64') + '|' + Buffer.from(cipher.encrypt(message)).toString('base64')
+			const counterValue = new DataView(counter.buffer, counter.byteOffset, counter.byteLength).getUint32(0, true);
+			const cipher = new chacha(key, iv, counterValue);
+			const payload = iv.toString('base64') + '|' + counter.toString('base64') + '|' + Buffer.from(cipher.encrypt(message)).toString('base64');
+			const mac = sha256.hmac(this.getMacKey(key), payload);
+			encrypted = payload + '|' + mac;
 		} catch (error) {
 			this.logEvent('encryptClientMessage', error, 'error')
 		}
@@ -567,12 +586,23 @@ class NodeCrypt {
 	}
 
 	// Decrypt a message from a client
-	// 解密来自客户端的消息
+	// 解密來自用戶端的訊息
 	decryptClientMessage(message, key) {
 		let decrypted = {};
 		try {
 			const parts = message.split('|');
-			const decipher = new chacha(key, Buffer.from(parts[0], 'base64'), Buffer.from(parts[1], 'base64').reduce((a, b) => a * b));
+			if (parts.length !== 4) {
+				return (decrypted)
+			}
+			const payload = parts[0] + '|' + parts[1] + '|' + parts[2];
+			const mac = sha256.hmac(this.getMacKey(key), payload);
+			if (mac !== parts[3]) {
+				this.logEvent('decryptClientMessage', 'hmac-mismatch', 'error');
+				return (decrypted)
+			}
+			const counterBytes = Buffer.from(parts[1], 'base64');
+			const counterValue = new DataView(counterBytes.buffer, counterBytes.byteOffset, counterBytes.byteLength).getUint32(0, true);
+			const decipher = new chacha(key, Buffer.from(parts[0], 'base64'), counterValue);
 			decrypted = JSON.parse(Buffer.from(decipher.decrypt(Buffer.from(parts[2], 'base64'))).toString('utf8').replace(/\0+$/, ''))
 		} catch (error) {
 			this.logEvent('decryptClientMessage', error, 'error')
@@ -581,7 +611,7 @@ class NodeCrypt {
 	}
 
 	// XOR two hex strings
-	// 对两个十六进制字符串进行异或
+	// 對兩個十六進位字串進行異或
 	xorHex(a, b) {
 		let result = '',
 			hexLength = Math.min(a.length, b.length);
@@ -592,28 +622,48 @@ class NodeCrypt {
 	}
 
 	// Check if value is a string
-	// 检查值是否为字符串
+	// 檢查值是否為字串
 	isString(value) {
 		return (value && Object.prototype.toString.call(value) === '[object String]' ? true : false)
 	}
 
 	// Check if value is an array
-	// 检查值是否为数组
+	// 檢查值是否為陣列
 	isArray(value) {
 		return (value && Object.prototype.toString.call(value) === '[object Array]' ? true : false)
 	}
 
 	// Check if value is an object
-	// 检查值是否为对象
+	// 檢查值是否為物件
 	isObject(value) {
 		return (value && Object.prototype.toString.call(value) === '[object Object]' ? true : false)
 	}
 
+	// 取得 HMAC 用的金鑰字串
+	getMacKey(key) {
+		const keyHex = Buffer.from(key).toString('hex');
+		return sha256(keyHex + 'mac')
+	}
+
 	// Handle server public key
-	// 处理服务器公钥
+	// 處理伺服器公鑰
 	async handleServerKey(serverKey) {
 		this.logEvent('handleServerKey', 'Received server key');
-		localStorage.removeItem(this.SERVER_KEY_STORAGE);
+		const storedKey = localStorage.getItem(this.SERVER_KEY_STORAGE);
+		if (storedKey && storedKey !== serverKey) {
+			this.logEvent('handleServerKey', 'server-key-mismatch', 'error');
+			if (this.callbacks.onServerKeyMismatch) {
+				try {
+					this.callbacks.onServerKeyMismatch({
+						storedKey: storedKey,
+						serverKey: serverKey
+					})
+				} catch (error) {
+					this.logEvent('handleServerKey-mismatch-callback', error, 'error')
+				}
+			}
+			return false
+		}
 		localStorage.setItem(this.SERVER_KEY_STORAGE, serverKey);
 		this.config.rsaPublic = serverKey;
 		return true
@@ -623,3 +673,4 @@ class NodeCrypt {
 if (typeof window !== 'undefined') {
 	window.NodeCrypt = NodeCrypt
 }
+

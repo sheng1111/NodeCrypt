@@ -65,7 +65,11 @@ export const encryptMessage = (message, key) => {
     const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
     cipher.setAutoPadding(false);
 
-    encrypted = iv.toString('base64') + '|' + cipher.update(paddedBuffer, '', 'base64') + cipher.final('base64');
+    const payload = iv.toString('base64') + '|' + cipher.update(paddedBuffer, '', 'base64') + cipher.final('base64');
+    const keyHex = Buffer.from(key).toString('hex');
+    const macKey = crypto.createHash('sha256').update(keyHex + 'mac').digest('hex');
+    const mac = crypto.createHmac('sha256', macKey).update(payload).digest('hex');
+    encrypted = payload + '|' + mac;
 
   } catch (error) {
     logEvent('encryptMessage', error, 'error');
@@ -82,6 +86,20 @@ export const decryptMessage = (message, key) => {
   try {
 
     const parts = message.split('|');
+    if (parts.length !== 3) {
+      return (decrypted);
+    }
+    const payload = parts[0] + '|' + parts[1];
+    const keyHex = Buffer.from(key).toString('hex');
+    const macKey = crypto.createHash('sha256').update(keyHex + 'mac').digest('hex');
+    const expectedMac = crypto.createHmac('sha256', macKey).update(payload).digest('hex');
+    if (
+      expectedMac.length !== parts[2].length ||
+      !crypto.timingSafeEqual(Buffer.from(expectedMac, 'hex'), Buffer.from(parts[2], 'hex'))
+    ) {
+      logEvent('decryptMessage', 'hmac-mismatch', 'error');
+      return (decrypted);
+    }
     const decipher = crypto.createDecipheriv(
       'aes-256-cbc',
       key,

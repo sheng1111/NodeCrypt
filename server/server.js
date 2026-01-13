@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const ws = require('ws');
 
 // Generate a new RSA key pair
-// 生成一个新的 RSA 密钥对
+// 產生一個新的 RSA 金鑰對
 const generateRSAKeyPair = () => {
 	try {
 		console.log('Generating new RSA keypair...');
@@ -65,7 +65,7 @@ var clients = {};
 var channels = {};
 
 // WebSocket server connection event handler
-// WebSocket 服务器连接事件处理程序
+// WebSocket 伺服器連線事件處理程式
 wss.on('connection', (connection) => {
 
 	if (
@@ -261,7 +261,7 @@ wss.on('connection', (connection) => {
 });
 
 // Process encrypted messages
-// 处理加密消息
+// 處理加密訊息
 const processEncryptedMessage = (clientId, message) => {
 	let decrypted = null;
 
@@ -295,7 +295,7 @@ const processEncryptedMessage = (clientId, message) => {
 };
 
 // Handle channel join requests
-// 处理加入频道请求
+// 處理加入頻道請求
 const handleJoinChannel = (clientId, decrypted) => {
 	if (
 		!isString(decrypted.p) ||
@@ -323,7 +323,7 @@ const handleJoinChannel = (clientId, decrypted) => {
 };
 
 // Handle client messages
-// 处理客户端消息
+// 處理用戶端訊息
 const handleClientMessage = (clientId, decrypted) => {
 	if (
 		!isString(decrypted.p) ||
@@ -356,7 +356,7 @@ const handleClientMessage = (clientId, decrypted) => {
 };
 
 // Handle channel messages
-// 处理频道消息
+// 處理頻道訊息
 const handleChannelMessage = (clientId, decrypted) => {
 	if (
 		!isObject(decrypted.p) ||
@@ -394,7 +394,7 @@ const handleChannelMessage = (clientId, decrypted) => {
 };
 
 // Broadcast member list to channel
-// 向频道广播成员列表
+// 向頻道廣播成員清單
 const broadcastMemberList = (channel) => {
 	try {
 		const members = channels[channel];
@@ -424,7 +424,7 @@ const broadcastMemberList = (channel) => {
 
 
 // Log events with timestamps and levels
-// 记录带时间戳和级别的事件
+// 紀錄包含時間戳與級別的事件
 const logEvent = (source, message, level) => {
 	if (
 		level !== 'debug' ||

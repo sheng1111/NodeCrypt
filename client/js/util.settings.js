@@ -1,5 +1,5 @@
-// Import DOM utility functions
-// 导入 DOM 工具函数
+﻿// Import DOM utility functions
+// 匯入 DOM 工具函式
 import {
 	$,
 	$$,
@@ -12,24 +12,24 @@ import {
 } from './util.dom.js';
 
 // Import theme utilities
-// 导入主题工具函数
+// 匯入主題工具函式
 import { THEMES, getCurrentTheme, applyTheme } from './util.theme.js';
 
 // Import i18n utilities
-// 导入国际化工具函数
+// 匯入國際化工具函式
 import { t, setLanguage, getCurrentLanguage, initI18n } from './util.i18n.js';
 // Default settings
-// 默认设置
+// 預設設定
 const DEFAULT_SETTINGS = {
 	notify: false,
 	sound: false,
 	theme: 'theme1'
-	// 注意：我们不设置默认语言，让系统自动检测浏览器语言
+	// 注意：我們不設定預設語言，讓系統自動偵測瀏覽器語言
 	// Note: We don't set a default language, let the system auto-detect browser language
 };
 
 // Load settings from localStorage
-// 从 localStorage 加载设置
+// 從 localStorage 載入設定
 function loadSettings() {
 	let s = localStorage.getItem('settings');
 	try {
@@ -44,7 +44,7 @@ function loadSettings() {
 }
 
 // Save settings to localStorage
-// 保存设置到 localStorage
+// 保存設定到 localStorage
 function saveSettings(settings) {
 	const {
 		notify,
@@ -61,15 +61,15 @@ function saveSettings(settings) {
 }
 
 // Apply settings to the document
-// 应用设置到文档
+// 套用設定到文件
 function applySettings(settings) {
 	// Initialize i18n with current language setting
-	// 根据当前语言设置初始化国际化
+	// 根據目前語言設定初始化國際化
 	initI18n(settings);
 }
 
 // Ask for browser notification permission
-// 请求浏览器通知权限
+// 請求瀏覽器通知權限
 function askNotificationPermission(callback) {
 	if (Notification.requestPermission.length === 0) {
 		Notification.requestPermission().then(callback)
@@ -79,7 +79,7 @@ function askNotificationPermission(callback) {
 }
 
 // Setup the settings panel UI
-// 设置设置面板 UI
+// 設定設定面板 UI
 function setupSettingsPanel() {
 	const settingsSidebar = $id('settings-sidebar');
 	const settingsContent = $id('settings-content');
@@ -89,10 +89,11 @@ function setupSettingsPanel() {
 	const settings = loadSettings();
 	
 	// Update settings title
-	// 更新设置标题
+	// 更新設定標題
 	if (settingsTitle) {
 		settingsTitle.textContent = t('settings.title', 'Settings');
-	}// Create settings content HTML
+	}
+	// Create settings content HTML
 	settingsContent.innerHTML = `
 		<div class="settings-section">
 			<div class="settings-section-title">${t('settings.notification', 'Notification Settings')}</div>
@@ -115,7 +116,7 @@ function setupSettingsPanel() {
 				</label>
 			</div>
 		</div>
-				<div class="settings-section">
+		<div class="settings-section">
 			<div class="settings-section-title">${t('settings.language', 'Language Settings')}</div>
 			<div class="settings-item">
 				<div class="settings-item-label">
@@ -123,8 +124,8 @@ function setupSettingsPanel() {
 				</div>
 				<div class="language-selector">
 					<select id="settings-language" class="language-select">
-						<option value="en" ${settings.language === 'en' ? 'selected' : ''}>🇺🇸 English</option>
-						<option value="zh" ${settings.language === 'zh' ? 'selected' : ''}>🇨🇳 中文</option>
+						<option value="en" ${settings.language === 'en' ? 'selected' : ''}>${t('settings.english', 'English')}</option>
+						<option value="zh" ${settings.language === 'zh' ? 'selected' : ''}>${t('settings.chinese', 'Chinese')}</option>
 					</select>
 				</div>
 			</div>
@@ -139,27 +140,28 @@ function setupSettingsPanel() {
 				`).join('')}
 			</div>
 		</div>
-	`;	const notifyCheckbox = $('#settings-notify', settingsContent);
+	`;
+	const notifyCheckbox = $('#settings-notify', settingsContent);
 	const soundCheckbox = $('#settings-sound', settingsContent);
 	const languageSelect = $('#settings-language', settingsContent);
 	
 	// Language select event handler
-	// 语言选择事件处理
+	// 語言選擇事件處理
 	on(languageSelect, 'change', e => {
 		const newLanguage = e.target.value;
 		settings.language = newLanguage;
 		
 		// Set language immediately
-		// 立即设置语言
+		// 立即設定語言
 		setLanguage(newLanguage);
 		
 		// Save settings
-		// 保存设置
+		// 保存設定
 		saveSettings(settings);
 		applySettings(settings);
 		
 		// Refresh the settings panel to show updated translations
-		// 刷新设置面板以显示更新的翻译
+		// 重新整理設定面板以顯示更新的翻譯
 		setTimeout(() => {
 			setupSettingsPanel();
 		}, 100);
@@ -169,7 +171,7 @@ function setupSettingsPanel() {
 		const checked = e.target.checked;
 		if (checked) {
 			if (!('Notification' in window)) {
-				alert('Notifications are not supported by your browser.');
+				alert(t('notification.not_supported', 'Notifications are not supported by your browser.'));
 				e.target.checked = false;
 				return
 			}
@@ -179,30 +181,33 @@ function setupSettingsPanel() {
 					settings.sound = false;
 					if (soundCheckbox) soundCheckbox.checked = false;
 					saveSettings(settings);
-					applySettings(settings);					// 防止重复通知，添加一个标志位
+					applySettings(settings);
+					// 防止重複通知，新增一個標誌位
 					if (!settingsSidebar._notificationShown) {
-						new Notification('Notifications enabled', {
-							body: 'You will receive alerts here.'
+						new Notification(t('notification.enabled', 'Notifications enabled'), {
+							body: t('notification.alert_here', 'You will receive alerts here.')
 						});
-						settingsSidebar._notificationShown = true; // 设置标志位
+						settingsSidebar._notificationShown = true; // 設定標誌位
 					}
 				} else {
 					settings.notify = false;
 					e.target.checked = false;
 					saveSettings(settings);
 					applySettings(settings);
-					alert('Please allow notifications in your browser settings.')
+					alert(t('notification.allow_browser', 'Please allow notifications in your browser settings.'))
 				}
 			})
 		} else {
 			settings.notify = false;
 			saveSettings(settings);
-			applySettings(settings);			// 重置标志位
+			applySettings(settings);
+			// 重置標誌位
 			if (settingsSidebar._notificationShown) {
 				settingsSidebar._notificationShown = false;
 			}
 		}
-	});	on(soundCheckbox, 'change', e => {
+	});
+	on(soundCheckbox, 'change', e => {
 		settings.sound = e.target.checked;
 		if (settings.sound) {
 			settings.notify = false;
@@ -212,24 +217,22 @@ function setupSettingsPanel() {
 		applySettings(settings)
 	});
 	// Theme selection event handlers
-	// 主题选择事件处理
+	// 主題選擇事件處理
 	const themeSelector = $('#theme-selector', settingsContent);
 	if (themeSelector) {
 		// Custom scrolling functionality
-		// 自定义滚动功能
+		// 自定義捲動功能
 		let isDragging = false;
 		let startX = 0;
 		let scrollLeft = 0;
 
 		// Mouse wheel scrolling (vertical -> horizontal)
-		// 鼠标滚轮滚动（垂直转水平）
 		on(themeSelector, 'wheel', e => {
 			e.preventDefault();
 			const scrollAmount = e.deltaY * 0.5; // Adjust scroll sensitivity
 			themeSelector.scrollLeft += scrollAmount;
 		});
 		// Mouse drag scrolling
-		// 鼠标拖拽滚动
 		let dragStartTime = 0;
 		let hasDragged = false;
 		
@@ -264,7 +267,7 @@ function setupSettingsPanel() {
 			}
 		});
 		// Touch support for mobile
-		// 移动端触摸支持
+		// 行動裝置觸控支援
 		let touchStartX = 0;
 		let touchScrollLeft = 0;
 		let touchStartTime = 0;
@@ -291,17 +294,17 @@ function setupSettingsPanel() {
 		});
 
 		// Handle touch end for theme selection
-		// 处理触摸结束的主题选择
+		// 處理觸摸結束的主題選擇
 		on(themeSelector, 'touchend', e => {
 			// If user swiped, don't trigger theme selection
-			// 如果用户滑动过，不触发主题选择
+			// 如果使用者滑動過，不觸發主題選擇
 			if (touchHasMoved) {
 				touchHasMoved = false;
 				return;
 			}
 			
 			// Check if it was a quick tap
-			// 检查是否是快速点击
+			// 檢查是否是快速點擊
 			const tapDuration = Date.now() - touchStartTime;
 			if (tapDuration > 300) {
 				return;
@@ -325,17 +328,17 @@ function setupSettingsPanel() {
 			}
 		});
 		// Theme selection click handler
-		// 主题选择点击处理器
+		// 主題選擇點擊處理器
 		on(themeSelector, 'click', e => {
 			// If user just dragged, don't trigger theme selection
-			// 如果用户刚刚拖拽过，不触发主题选择
+			// 如果使用者剛剛拖曳過，不觸發主題選擇
 			if (hasDragged) {
 				hasDragged = false;
 				return;
 			}
 			
 			// Also check if it was a quick click (less than 200ms and minimal movement)
-			// 同时检查是否是快速点击（少于200ms且移动很少）
+			// 同時檢查是否是快速點擊（少於 200ms 且移動很少）
 			const clickDuration = Date.now() - dragStartTime;
 			if (clickDuration > 200) {
 				return;
@@ -367,7 +370,7 @@ function isMobile() {
 }
 
 // Open the settings panel
-// 打开设置面板
+// 開啟設定面板
 function openSettingsPanel() {
 	const settingsSidebar = $id('settings-sidebar');
 	const sidebar = $id('sidebar');
@@ -384,7 +387,8 @@ function openSettingsPanel() {
 		settingsSidebar.classList.add('mobile-open');
 		if (sidebarMask) {
 			sidebarMask.classList.add('active');
-		}	} else {
+		}
+	} else {
 		// Desktop: show settings sidebar as overlay with slide animation
 		settingsSidebar.style.display = 'flex';
 		// Force reflow then slide in
@@ -398,7 +402,7 @@ function openSettingsPanel() {
 }
 
 // Close the settings panel
-// 关闭设置面板
+// 關閉設定面板
 function closeSettingsPanel() {
 	const settingsSidebar = $id('settings-sidebar');
 	const sidebarMask = $id('mobile-sidebar-mask'); // mobile-sidebar-mask is used for settings on mobile
@@ -437,22 +441,22 @@ function closeSettingsPanel() {
 }
 
 // Initialize settings on page load
-// 页面加载时初始化设置
+// 頁面載入時初始化設定
 function initSettings() {
 	const settings = loadSettings();
 	applySettings(settings);
 	
 	// Apply theme from settings
-	// 从设置中应用主题
+	// 從設定中套用主題
 	if (settings.theme) {
 		applyTheme(settings.theme);
 	}
 	
 	// Listen for language change events to update UI
-	// 监听语言变更事件以更新UI
+	// 監聽語言變更事件以更新 UI
 	window.addEventListener('languageChange', () => {
 		// Update settings title if settings panel is open
-		// 如果设置面板已打开，更新设置标题
+		// 如果設定面板已開啟，更新設定標題
 		const settingsTitle = $id('settings-title');
 		if (settingsTitle) {
 			settingsTitle.textContent = t('settings.title', 'Settings');
@@ -461,17 +465,17 @@ function initSettings() {
 }
 
 // Maximum notification text length
-// 通知文本最大长度
+// 通知文字最大長度
 const MAX_NOTIFY_TEXT_LEN = 100;
 
 // Truncate text for notifications
-// 截断通知文本
+// 截斷通知文字
 function truncateText(text) {
 	return text.length > MAX_NOTIFY_TEXT_LEN ? text.slice(0, MAX_NOTIFY_TEXT_LEN) + '...' : text
 }
 
 // Play sound notification
-// 播放声音通知
+// 播放聲音通知
 function playSoundNotification() {
 	try {
 		const ctx = new(window.AudioContext || window.webkitAudioContext)();
@@ -492,11 +496,12 @@ function playSoundNotification() {
 }
 
 // Show desktop notification
-// 显示桌面通知
+// 顯示桌面通知
 function showDesktopNotification(roomName, text, msgType, sender) {
 	if (!('Notification' in window) || Notification.permission !== 'granted') return;
 	let body;
-	const senderPrefix = sender ? `${sender}:` : '';	if (msgType === 'image' || msgType === 'private image') {
+	const senderPrefix = sender ? `${sender}:` : '';
+	if (msgType === 'image' || msgType === 'private image') {
 		body = `${senderPrefix}${t('notification.image', '[image]')}`;
 		if (msgType === 'private image') {
 			body = `${t('notification.private', '(Private)')}${body}`
@@ -515,7 +520,7 @@ function showDesktopNotification(roomName, text, msgType, sender) {
 }
 
 // Notify message entry point
-// 通知消息主入口
+// 通知訊息主入口
 export function notifyMessage(roomName, msgType, text, sender) {
 	const settings = loadSettings();
 	if (settings.notify) {

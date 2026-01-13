@@ -1,5 +1,5 @@
 // Import necessary modules
-// 导入必要的模块
+// 匯入必要的模組
 import {
 	createAvatarSVG
 } from './util.avatar.js';
@@ -28,7 +28,7 @@ import {
 } from './util.i18n.js';
 
 // Render the chat area
-// 渲染聊天区域
+// 渲染聊天區域
 export function renderChatArea() {
 	const chatArea = $id('chat-area');
 	if (!chatArea) return;
@@ -45,7 +45,7 @@ export function renderChatArea() {
 }
 
 // Add a message to the chat area
-// 添加消息到聊天区域
+// 新增訊息到聊天區域
 export function addMsg(text, isHistory = false, msgType = 'text', timestamp = null) {
 	let ts = isHistory ? timestamp : (timestamp || Date.now());
 	if (!ts) return;
@@ -118,11 +118,11 @@ export function addMsg(text, isHistory = false, msgType = 'text', timestamp = nu
 }
 
 // Add a message from another user to the chat area
-// 添加来自其他用户的消息到聊天区域
+// 新增來自其他使用者的訊息到聊天區域
 export function addOtherMsg(msg, userName = '', avatar = '', isHistory = false, msgType = 'text', timestamp = null) {
 	if (!userName && activeRoomIndex >= 0) {
 		const rd = roomsData[activeRoomIndex];
-		// 优先使用文件消息自带的 userName 字段
+		// 優先使用檔案訊息自帶的 userName 欄位
 		if (msg && msg.userName) {
 			userName = msg.userName;
 		} else if (rd && msg && msg.clientId && rd.userMap[msg.clientId]) {
@@ -205,7 +205,7 @@ export function addOtherMsg(msg, userName = '', avatar = '', isHistory = false, 
 }
 
 // Add a system message to the chat area
-// 添加系统消息到聊天区域
+// 新增系統訊息到聊天區域
 export function addSystemMsg(text, isHistory = false, timestamp = null) {
 	if (!isHistory && activeRoomIndex >= 0) {
 		const ts = timestamp || Date.now();
@@ -226,7 +226,7 @@ export function addSystemMsg(text, isHistory = false, timestamp = null) {
 }
 
 // Update the style of the chat input area
-// 更新聊天输入区域的样式
+// 更新聊天輸入區域的樣式
 export function updateChatInputStyle() {
 	const rd = roomsData[activeRoomIndex];
 	const chatInputArea = $('.chat-input-area');
@@ -246,7 +246,7 @@ export function updateChatInputStyle() {
 }
 
 // Setup image preview functionality
-// 设置图片预览功能
+// 設定圖片預覽功能
 export function setupImagePreview() {
 	on($id('chat-area'), 'click', function(e) {
 		const target = e.target;
@@ -257,7 +257,7 @@ export function setupImagePreview() {
 }
 
 // Show the image modal
-// 显示图片模态框
+// 顯示圖片對話框
 export function showImageModal(src) {
 	const modal = createElement('div', {
 		class: 'img-modal-bg'
@@ -337,7 +337,7 @@ export function showImageModal(src) {
 }
 
 // Render file message content
-// 渲染文件消息内容
+// 渲染檔案訊息內容
 function renderFileMessage(fileData, isSender) {
 	const {
 		fileId,
@@ -380,13 +380,13 @@ function renderFileMessage(fileData, isSender) {
 			statusText = `Receiving ${transfer.receivedVolumes.size}/${transfer.totalVolumes}`;
 			showProgress = true;
 		} else if (transfer.status === 'completed') {
-			// 完成时不显示任何状态，只显示下载按钮
+			// 完成時不顯示任何狀態，只顯示下載按鈕
 			downloadBtnStyle = isSender ? 'display: none;' : 'display: flex;';
 		}	} else if (isSender) {
-		// 发送方历史消息，不显示状态和下载按钮
+		// 傳送方歷史訊息，不顯示狀態和下載按鈕
 		downloadBtnStyle = 'display: none;';
 	} else {
-		// 接收方历史消息，直接显示下载按钮（带动画效果）
+		// 接收方歷史訊息，直接顯示下載按鈕（帶動畫效果）
 		downloadBtnStyle = 'display: flex;';
 	}
 	// Different icon for archives vs single files
@@ -417,7 +417,7 @@ function renderFileMessage(fileData, isSender) {
 }
 
 // Automatically adjust the height of the input area
-// 自动调整输入区域的高度
+// 自動調整輸入區域的高度
 export function autoGrowInput() {
 	const input = $('.input-message-input');
 	if (!input) return;
@@ -426,7 +426,7 @@ export function autoGrowInput() {
 }
 
 // Handle pasting text as plain text
-// 处理粘贴为纯文本
+// 處理貼上為純文字
 function handlePasteAsPlainText(element) {
 	if (!element) return;
 	on(element, 'paste', function(e) {
@@ -454,7 +454,7 @@ function handlePasteAsPlainText(element) {
 }
 
 // Setup input placeholder functionality
-// 设置输入框占位符功能
+// 設定輸入框佔位符功能
 export function setupInputPlaceholder() {
 	const input = $('.input-message-input');
 	const placeholder = $('.input-field-placeholder');

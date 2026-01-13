@@ -1,5 +1,5 @@
 // UI logic for NodeCrypt web client
-// NodeCrypt 网页客户端的 UI 逻辑
+// NodeCrypt 網頁用戶端的 UI 邏輯
 
 import {
 	createAvatarSVG
@@ -27,10 +27,10 @@ import {
 } from './chat.js';
 
 // Utility functions for security and error handling
-// 安全和错误处理工具函数
+// 安全與錯誤處理工具函式
 
 // Simple encryption/decryption using base64 and character shifting
-// 使用base64和字符偏移的简单加密/解密
+// 使用 base64 與字元偏移的簡單加密/解密
 function simpleEncrypt(text) {
 	if (!text) return '';
 	// Convert to base64 and shift characters
@@ -57,7 +57,7 @@ function simpleDecrypt(encrypted) {
 }
 
 // Validate room data
-// 验证房间数据
+// 驗證房間資料
 function validateRoomData(roomData) {
 	if (!roomData) {
 		return { valid: false, error: 'No room data available' };
@@ -69,7 +69,7 @@ function validateRoomData(roomData) {
 }
 
 // Copy text to clipboard with fallback
-// 复制文本到剪贴板（含降级处理）
+// 複製文字到剪貼簿（含降級處理）
 function copyToClipboard(text, successMessage = t('action.copied', 'Copied to clipboard!'), errorPrefix = t('action.copy_failed', 'Copy failed, url:')) {
 	if (!text) {
 		window.addSystemMsg && window.addSystemMsg(t('action.nothing_to_copy', 'Nothing to copy'));
@@ -89,7 +89,7 @@ function copyToClipboard(text, successMessage = t('action.copied', 'Copied to cl
 }
 
 // Show fallback copy method
-// 显示降级复制方法
+// 顯示降級複製方法
 function showFallbackCopy(text, prefix) {
 	if (typeof prompt === 'function') {
 		prompt(prefix, text);
@@ -100,7 +100,7 @@ function showFallbackCopy(text, prefix) {
 }
 
 // Execute menu action with error handling
-// 执行菜单操作并处理错误
+// 執行選單操作並處理錯誤
 function executeMenuAction(action, closeMenuCallback) {
 	try {
 		switch (action) {
@@ -122,7 +122,7 @@ function executeMenuAction(action, closeMenuCallback) {
 }
 
 // Handle share action
-// 处理分享操作
+// 處理分享操作
 function handleShareAction() {
 	const validation = validateRoomData(roomsData[activeRoomIndex]);
 	if (!validation.valid) {
@@ -148,7 +148,7 @@ function handleShareAction() {
 }
 
 // Handle exit action
-// 处理退出操作
+// 處理退出操作
 function handleExitAction() {
 	try {
 		const result = exitRoom();
@@ -163,7 +163,7 @@ function handleExitAction() {
 }
 
 // Render the main header
-// 渲染主标题栏
+// 渲染主標題欄
 export function renderMainHeader() {
 	const rd = roomsData[activeRoomIndex];
 	let roomName = rd ? rd.roomName : 'Room';
@@ -178,7 +178,7 @@ export function renderMainHeader() {
 }
 
 // Setup mobile UI event handlers
-// 设置移动端 UI 事件处理
+// 設定行動裝置 UI 事件處理
 export function setupMobileUIHandlers() {
 	const sidebar = document.getElementById('sidebar');
 	const rightbar = document.getElementById('rightbar');
@@ -254,7 +254,7 @@ export function setupMobileUIHandlers() {
 				}
 			}
 			if (settingsSidebar && settingsSidebar.classList.contains('mobile-open')) {
-				// 检查点击目标是否为设置按钮本身
+				// 檢查點擊目標是否為設定按鈕本身
 				const isSettingsButton = settingsBtn && settingsBtn.contains(ev.target);
 				if (!settingsSidebar.contains(ev.target) && !isSettingsButton) {
 					closeSettingsPanel();
@@ -268,7 +268,7 @@ export function setupMobileUIHandlers() {
 			}
 		} else {
 			// Desktop-specific logic
-			// 如果设置侧边栏打开，并且点击位置在侧边栏外部且不是设置按钮本身
+			// 如果設定側邊欄開啟，並且點擊位置在側邊欄外部且不是設定按鈕本身
 			if (settingsSidebar && settingsSidebar.classList.contains('open')) {
 				const isSettingsButton = settingsBtn && settingsBtn.contains(ev.target);
 				if (!settingsSidebar.contains(ev.target) && !isSettingsButton) {
@@ -280,7 +280,7 @@ export function setupMobileUIHandlers() {
 }
 
 // Render the user/member list
-// 渲染用户/成员列表
+// 渲染使用者/成員清單
 export function renderUserList(updateHeader = false) {
 	const userListEl = $id('member-list');
 	if (!userListEl) return;
@@ -289,11 +289,11 @@ export function renderUserList(updateHeader = false) {
 	if (!rd) return;
 	const me = rd.userList.find(u => u.clientId === rd.myId);
 	const others = rd.userList.filter(u => u.clientId !== rd.myId);
-	// 新增：如有其他成员，顶部插入简洁提示
+	// 新增：如有其他成員，頂部插入簡潔提示
 	if (others.length > 0) {
 		const tip = document.createElement('div');
 		tip.className = 'member-tip member-tip-center';
-		tip.textContent = t('ui.start_private_chat', '选择用户开始私信');
+		tip.textContent = t('ui.start_private_chat', '選擇使用者開始私訊');
 		userListEl.appendChild(tip);
 	}
 	if (me) userListEl.appendChild(createUserItem(me, true));
@@ -304,7 +304,7 @@ export function renderUserList(updateHeader = false) {
 }
 
 // Create a user list item
-// 创建一个用户列表项
+// 建立一個使用者清單項
 export function createUserItem(user, isMe) {
 	const div = document.createElement('div');
 	const rd = roomsData[activeRoomIndex];
@@ -326,7 +326,7 @@ export function createUserItem(user, isMe) {
 }
 
 // Setup the 'more' button menu
-// 设置"更多"按钮菜单
+// 設定"更多"按鈕選單
 export function setupMoreBtnMenu() {
 	const btn = $id('more-btn');
 	const menu = $id('more-menu');
@@ -334,17 +334,17 @@ export function setupMoreBtnMenu() {
 	let animating = false;
 
 	// Open the menu
-	// 打开菜单
+	// 開啟選單
 	function openMenu() {
 		menu.style.display = 'block';
 		menu.classList.remove('close');
-		// 强制触发重绘，然后添加打开动画
-		menu.offsetHeight; // 强制重绘
+		// 強制觸發重繪，然後新增開啟動畫
+		menu.offsetHeight; // 強制重繪
 		menu.classList.add('open');
 	}
 
 	// Close the menu
-	// 关闭菜单
+	// 關閉選單
 	function closeMenu() {
 		if (animating) return;
 		animating = true;
@@ -388,7 +388,7 @@ export function setupMoreBtnMenu() {
 }
 
 // Prevent space and special character input
-// 禁止输入空格和特殊字符
+// 禁止輸入空格和特殊字元
 export function preventSpaceInput(input) {
 	if (!input) return;
 	input.addEventListener('keydown', function(e) {
@@ -404,7 +404,7 @@ export function preventSpaceInput(input) {
 }
 
 // Login form submit handler
-// 登录表单提交处理函数
+// 登入表單提交處理函式
 export function loginFormHandler(modal) {
 	return function(e) {
 		e.preventDefault();
@@ -461,7 +461,7 @@ export function loginFormHandler(modal) {
 	}
 }
 
-// 生成登录表单HTML
+// 產生登入表單 HTML
 // Generate login form HTML
 export function generateLoginForm(isModal = false) {
 	const idPrefix = isModal ? '-modal' : '';
@@ -494,7 +494,7 @@ export function openLoginModal() {
 }
 
 // Setup member list tabs
-// 设置成员列表标签页
+// 設定成員清單標籤頁
 export function setupTabs() {
 	const tabs = document.getElementById("member-tabs").children;
 	for (let i = 0; i < tabs.length; i++) {
@@ -506,7 +506,7 @@ export function setupTabs() {
 }
 
 // Autofill room and password from URL
-// 从 URL 自动填充房间和密码
+// 從 URL 自動填入房間和密碼
 export function autofillRoomPwd(formPrefix = '') {
 	const params = new URLSearchParams(window.location.search);
 	
@@ -573,23 +573,23 @@ export function autofillRoomPwd(formPrefix = '') {
 	}
 }
 
-// 初始化登录表单
+// 初始化登入表單
 // Initialize login form
 export function initLoginForm() {
 	const loginFormContainer = document.getElementById('login-form');
 	if (loginFormContainer && loginFormContainer.children.length === 0) {
-		// 只有当登录表单为空时才初始化
+		// 只有當登入表單為空時才初始化
 		// Only initialize if login form is empty
 		loginFormContainer.innerHTML = generateLoginForm(false);
 	}
 	
-	// 为登录页面添加class，用于手机适配
+// 為登入頁面新增 class，用於手機適配
 	// Add class to login page for mobile adaptation
 	document.body.classList.add('login-page');
 }
 
 // Listen for language change events to refresh UI
-// 监听语言变更事件刷新UI
+// 監聽語言變更事件重新整理 UI
 window.addEventListener('languageChange', () => {
 	// Refresh main header and user list
 	renderMainHeader();
@@ -600,7 +600,7 @@ window.addEventListener('languageChange', () => {
 });
 
 // Listen for regenerate login form event
-// 监听重新生成登录表单事件
+// 監聽重新生成登入表單事件
 window.addEventListener('regenerateLoginForm', () => {
 	const loginFormContainer = document.getElementById('login-form');
 	if (loginFormContainer) {
@@ -608,7 +608,7 @@ window.addEventListener('regenerateLoginForm', () => {
 	}
 });
 
-// 初始化翻转卡片功能
+// 初始化翻轉卡片功能
 // Initialize flip card functionality
 export function initFlipCard() {
 	const flipCard = document.getElementById('flip-card');
@@ -620,10 +620,10 @@ export function initFlipCard() {
 	const flipCardInner = flipCard.querySelector('.flip-card-inner');
 	if (!flipCardInner) return;
 	
-	// 翻转状态
+// 翻轉狀態
 	let isFlipped = false;
 	
-	// 简单的翻转函数
+// 簡單的翻轉函式
 	function toggleFlip() {
 		isFlipped = !isFlipped;
 		if (isFlipped) {
@@ -633,14 +633,14 @@ export function initFlipCard() {
 		}
 	}
 	
-	// 帮助按钮点击事件
+	// 幫助按鈕點擊事件
 	helpBtn.addEventListener('click', (e) => {
 		e.preventDefault();
 		e.stopPropagation();
 		toggleFlip();
 	});
 	
-	// 返回按钮点击事件
+	// 返回按鈕點擊事件
 	backBtn.addEventListener('click', (e) => {
 		e.preventDefault();
 		e.stopPropagation();

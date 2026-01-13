@@ -1,8 +1,8 @@
-// 导入 NodeCrypt 模块（加密功能模块）
+// 匯入 NodeCrypt 模組（加密功能模組）
 // Import the NodeCrypt module (used for encryption)
 import './NodeCrypt.js';
 
-// 从 util.file.js 中导入设置文件发送的函数
+// 從 util.file.js 中匯入設定檔案傳送的函式
 // Import setupFileSend function from util.file.js
 import {
 	setupFileSend,
@@ -10,90 +10,91 @@ import {
 	downloadFile
 } from './util.file.js';
 
-// 从 util.image.js 中导入图片处理功能
+// 從 util.image.js 中匯入圖片處理功能
 // Import image processing functions from util.image.js
 import {
 	setupImagePaste
 } from './util.image.js';
 
-// 从 util.emoji.js 中导入设置表情选择器的函数
+// 從 util.emoji.js 中匯入設定表情選擇器的函式
 // Import setupEmojiPicker function from util.emoji.js
 import {
 	setupEmojiPicker
 } from './util.emoji.js';
 
-// 从 util.settings.js 中导入设置面板的功能函数
+// 從 util.settings.js 中匯入設定面板的功能函式
 // Import functions for settings panel from util.settings.js
 import {
-	openSettingsPanel,   // 打开设置面板 / Open settings panel
-	closeSettingsPanel,  // 关闭设置面板 / Close settings panel
-	initSettings,         // 初始化设置 / Initialize settings
-	notifyMessage         // 通知信息提示 / Display notification message
+	openSettingsPanel,   // 開啟設定面板 / Open settings panel
+	closeSettingsPanel,  // 關閉設定面板 / Close settings panel
+	initSettings,         // 初始化設定 / Initialize settings
+	notifyMessage         // 通知訊息提示 / Display notification message
 } from './util.settings.js';
 import { t, updateStaticTexts } from './util.i18n.js';
 
-// 从 util.theme.js 中导入主题功能函数
+// 從 util.theme.js 中匯入主題功能函式
 // Import theme functions from util.theme.js
 import {
-	initTheme            // 初始化主题 / Initialize theme
+	initTheme            // 初始化主題 / Initialize theme
 } from './util.theme.js';
+import { initPwa } from './util.pwa.js';
 
-// 从 util.dom.js 中导入常用 DOM 操作函数
+// 從 util.dom.js 中匯入常用 DOM 操作函式
 // Import common DOM manipulation functions from util.dom.js
 import {
-	$,         // 简化的 document.querySelector / Simplified selector
-	$id,       // document.getElementById 的简写 / Shortcut for getElementById
-	removeClass // 移除类名 / Remove a CSS class
+	$,         // 簡化的 document.querySelector / Simplified selector
+	$id,       // document.getElementById 的簡寫 / Shortcut for getElementById
+	removeClass // 移除類名 / Remove a CSS class
 } from './util.dom.js';
 
-// 从 room.js 中导入房间管理相关变量和函数
+// 從 room.js 中匯入房間管理相關變數和函式
 // Import room-related variables and functions from room.js
 import {
-	roomsData,         // 当前所有房间的数据 / Data of all rooms
-	activeRoomIndex,   // 当前激活的房间索引 / Index of the active room
-	joinRoom           // 加入房间的函数 / Function to join a room
+	roomsData,         // 目前所有房間的資料 / Data of all rooms
+	activeRoomIndex,   // 目前啟用的房間索引 / Index of the active room
+	joinRoom           // 加入房間的函式 / Function to join a room
 } from './room.js';
 
-// 从 chat.js 中导入聊天功能相关的函数
+// 從 chat.js 中匯入聊天功能相關的函式
 // Import chat-related functions from chat.js
 import {
-	addMsg,               // 添加普通消息到聊天窗口 / Add a normal message to chat
-	addOtherMsg,          // 添加其他用户消息 / Add message from other users
-	addSystemMsg,         // 添加系统消息 / Add a system message
-	setupImagePreview,    // 设置图片预览功能 / Setup image preview
-	setupInputPlaceholder, // 设置输入框的占位提示 / Setup placeholder for input box
-	autoGrowInput         // 自动调整输入框高度 / Auto adjust input height
+	addMsg,               // 新增普通訊息到聊天視窗 / Add a normal message to chat
+	addOtherMsg,          // 新增其他使用者訊息 / Add message from other users
+	addSystemMsg,         // 新增系統訊息 / Add a system message
+	setupImagePreview,    // 設定圖片預覽功能 / Setup image preview
+	setupInputPlaceholder, // 設定輸入框的佔位提示 / Setup placeholder for input box
+	autoGrowInput         // 自動調整輸入框高度 / Auto adjust input height
 } from './chat.js';
 
-// 从 ui.js 中导入 UI 界面相关的功能
+// 從 ui.js 中匯入 UI 介面相關的功能
 // Import user interface functions from ui.js
-import {	renderUserList,       // 渲染用户列表 / Render user list
-	renderMainHeader,     // 渲染主标题栏 / Render main header
-	setupMoreBtnMenu,     // 设置更多按钮的下拉菜单 / Setup "more" button menu
-	preventSpaceInput,    // 防止输入空格 / Prevent space input in form fields
-	loginFormHandler,     // 登录表单提交处理器 / Login form handler
-	openLoginModal,       // 打开登录窗口 / Open login modal
-	setupTabs,            // 设置页面标签切换 / Setup tab switching
-	autofillRoomPwd,      // 自动填充房间密码 / Autofill room password
-	generateLoginForm,    // 生成登录表单HTML / Generate login form HTML
-	initLoginForm,        // 初始化登录表单 / Initialize login form
-	initFlipCard          // 初始化翻转卡片功能 / Initialize flip card functionality
+import {	renderUserList,       // 渲染使用者清單 / Render user list
+	renderMainHeader,     // 渲染主標題欄 / Render main header
+	setupMoreBtnMenu,     // 設定更多按鈕的下拉選單 / Setup "more" button menu
+	preventSpaceInput,    // 防止輸入空格 / Prevent space input in form fields
+	loginFormHandler,     // 登入表單提交處理器 / Login form handler
+	openLoginModal,       // 開啟登入視窗 / Open login modal
+	setupTabs,            // 設定頁面標籤切換 / Setup tab switching
+	autofillRoomPwd,      // 自動填入房間密碼 / Autofill room password
+	generateLoginForm,    // 生成登入表單HTML / Generate login form HTML
+	initLoginForm,        // 初始化登入表單 / Initialize login form
+	initFlipCard          // 初始化翻轉卡片功能 / Initialize flip card functionality
 } from './ui.js';
 
-// 设置全局配置参数
+// 設定全域配置參數
 // Set global configuration parameters
 window.config = {
-	wsAddress: `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}`, // WebSocket 服务器地址 / WebSocket server address
+	wsAddress: `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}`, // WebSocket 伺服器位址 / WebSocket server address
 	//wsAddress: `wss://crypt.works`,
-	debug: true                       // 是否开启调试模式 / Enable debug mode
+	debug: true                       // 是否開啟除錯模式 / Enable debug mode
 };
 
-// 在文档开始加载前就初始化语言设置，防止闪烁
+// 在頁面開始載入前就初始化語言設定，防止閃爍
 // Initialize language settings before document starts loading
 initSettings();
 updateStaticTexts();
 
-// 把一些函数挂载到 window 对象上供其他模块使用
+// 把一些函式掛載到 window 物件上供其他模組使用
 // Expose functions to the global window object for accessibility
 window.addSystemMsg = addSystemMsg;
 window.addOtherMsg = addOtherMsg;
@@ -103,76 +104,82 @@ window.setupEmojiPicker = setupEmojiPicker;
 window.handleFileMessage = handleFileMessage;
 window.downloadFile = downloadFile;
 
-// 当 DOM 内容加载完成后执行初始化逻辑
+// 當 DOM 內容載入完成後執行初始化邏輯
 // Run initialization logic when the DOM content is fully loaded
 window.addEventListener('DOMContentLoaded', () => {
-	// 移除预加载样式类，允许过渡效果
+	// 移除預載樣式類，允許過渡效果
 	// Remove preload class to allow transitions
 	setTimeout(() => {
 		document.body.classList.remove('preload');
 	}, 300);
+
+	const footerYear = $id('footer-year');
+	if (footerYear) {
+		footerYear.textContent = String(new Date().getFullYear());
+	}
 	
-	// 初始化登录表单 / Initialize login form
+	// 初始化登入表單 / Initialize login form
 	initLoginForm();
 
-	const loginForm = $id('login-form');               // 登录表单 / Login form
+	const loginForm = $id('login-form');               // 登入表單 / Login form
 
 	if (loginForm) {
-		// 监听登录表单提交事件 / Listen to login form submission
+		// 監聽登入表單提交事件 / Listen to login form submission
 		loginForm.addEventListener('submit', loginFormHandler(null))
 	}
 
-	const joinBtn = $('.join-room'); // 加入房间按钮 / Join room button
+	const joinBtn = $('.join-room'); // 加入房間按鈕 / Join room button
 	if (joinBtn) {
-		joinBtn.onclick = openLoginModal; // 点击打开登录窗口 / Click to open login modal
+		joinBtn.onclick = openLoginModal; // 點擊開啟登入視窗 / Click to open login modal
 	}
-	// 阻止用户输入用户名、房间名和密码时输入空格
+	// 阻止使用者輸入使用者名稱、房間名和密碼時輸入空格
 	// Prevent space input for username, room name, and password fields
 	preventSpaceInput($id('userName'));
 	preventSpaceInput($id('roomName'));
 	preventSpaceInput($id('password'));
 	
-	// 初始化翻转卡片功能 / Initialize flip card functionality
+	// 初始化翻轉卡片功能 / Initialize flip card functionality
 	initFlipCard();
 	
-	// 初始化辅助功能和界面设置
+	// 初始化輔助功能和介面設定
 	// Initialize autofill, input placeholders, and menus
 	autofillRoomPwd();	setupInputPlaceholder();
 	setupMoreBtnMenu();
 	setupImagePreview();	setupEmojiPicker();
-	// 由于我们已经在DOM加载前预先初始化了语言设置，这里不需要重复初始化
+	// 由於我們已在 DOM 載入前預先初始化語言設定，這裡不需要重複初始化
 	// initSettings();
-	// updateStaticTexts(); // 在初始化设置后更新静态文本 / Update static texts after initializing settings
-	initTheme(); // 初始化主题 / Initialize theme
+	// updateStaticTexts(); // 在初始化設定後更新靜態文字 / Update static texts after initializing settings
+	initTheme(); // 初始化主題 / Initialize theme
+	initPwa();
 	
-	const settingsBtn = $id('settings-btn'); // 设置按钮 / Settings button
+	const settingsBtn = $id('settings-btn'); // 設定按鈕 / Settings button
 	if (settingsBtn) {
 		settingsBtn.onclick = (e) => {
 			e.stopPropagation();  // 阻止事件冒泡 / Stop event from bubbling
-			openSettingsPanel(); // 打开设置面板 / Open settings panel
+			openSettingsPanel(); // 開啟設定面板 / Open settings panel
 		}
 	}
 
-	// 设置返回按钮事件处理 / Settings back button event handler
+	// 設定返回按鈕事件處理 / Settings back button event handler
 	const settingsBackBtn = $id('settings-back-btn');
 	if (settingsBackBtn) {
 		settingsBackBtn.onclick = (e) => {
 			e.stopPropagation();
-			closeSettingsPanel(); // 关闭设置面板 / Close settings panel
+			closeSettingsPanel(); // 關閉設定面板 / Close settings panel
 		}
 	}
-	// 点击其他地方时关闭设置面板 (已移除，因为现在使用侧边栏形式)
+	// 點擊其他地方時關閉設定面板 (已移除，因為現在使用側邊欄形式)
 	// Close settings panel when clicking outside (removed since we now use sidebar format)
-	const input = document.querySelector('.input-message-input'); // 消息输入框 / Message input box
+	const input = document.querySelector('.input-message-input'); // 訊息輸入框 / Message input box
 	
-	// 设置图片粘贴功能
+	// 設定圖片貼上功能
 	// Setup image paste functionality
 	const imagePasteHandler = setupImagePaste('.input-message-input');
 	
 	if (input) {
-		input.focus(); // 自动聚焦 / Auto focus
+		input.focus(); // 自動聚焦 / Auto focus
 		input.addEventListener('keydown', (e) => {
-			// 按下 Enter 键并且不按 Shift，表示发送消息
+			// 按下 Enter 鍵並且不按 Shift，表示傳送訊息
 			// Pressing Enter (without Shift) sends the message
 			if (e.key === 'Enter' && !e.shiftKey) {
 				e.preventDefault();
@@ -181,26 +188,26 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 	
-	// 发送消息的统一函数
+	// 傳送訊息的統一函式
 	// Unified function to send messages
 	function sendMessage() {
-		const text = input.innerText.trim(); // 获取输入的文本 / Get input text
-		const images = imagePasteHandler ? imagePasteHandler.getCurrentImages() : []; // 获取所有图片
+		const text = input.innerText.trim(); // 取得輸入的文字 / Get input text
+		const images = imagePasteHandler ? imagePasteHandler.getCurrentImages() : []; // 取得所有圖片
 
-		if (!text && images.length === 0) return; // 如果没有文本且没有图片，则不发送
-		const rd = roomsData[activeRoomIndex]; // 当前房间数据 / Current room data
+		if (!text && images.length === 0) return; // 如果沒有文字且沒有圖片，则不傳送
+		const rd = roomsData[activeRoomIndex]; // 目前房間資料 / Current room data
 		
 		if (rd && rd.chat) {
 			if (images.length > 0) {
-				// 发送包含图片的消息 (支持多图和文字合并)
+				// 傳送包含圖片的訊息 (支援多圖和文字合併)
 				// Send message with images (supports multiple images and text combined)
 				const messageContent = {
-					text: text || '', // 包含文字内容，如果有的话
-					images: images    // 包含所有图片数据
+					text: text || '', // 包含文字內容，如果有的话
+					images: images    // 包含所有圖片資料
 				};
 
 				if (rd.privateChatTargetId) {
-					// 私聊图片消息加密并发送
+					// 私訊圖片訊息加密並傳送
 					// Encrypt and send private image message
 					const targetClient = rd.chat.channel[rd.privateChatTargetId];
 					if (targetClient && targetClient.shared) {
@@ -221,18 +228,18 @@ window.addEventListener('DOMContentLoaded', () => {
 						addSystemMsg(`${t('system.private_message_failed', 'Cannot send private message to')} ${rd.privateChatTargetName}. ${t('system.user_not_connected', 'User might not be fully connected.')}`)
 					}
 				} else {
-					// 公共频道图片消息发送
+					// 公開頻道圖片訊息傳送
 					// Send image message to public channel
 					rd.chat.sendChannelMessage('image', messageContent);
 					addMsg(messageContent, false, 'image');
 				}
 				
-				imagePasteHandler.clearImages(); // 清除所有图片预览
+				imagePasteHandler.clearImages(); // 清除所有圖片預覽
 			} else if (text) {
-				// 发送纯文本消息
+				// 傳送純文字訊息
 				// Send text-only message
 				if (rd.privateChatTargetId) {
-					// 私聊消息加密并发送
+					// 私訊訊息加密並傳送
 					// Encrypt and send private message
 					const targetClient = rd.chat.channel[rd.privateChatTargetId];
 					if (targetClient && targetClient.shared) {
@@ -253,42 +260,42 @@ window.addEventListener('DOMContentLoaded', () => {
 						addSystemMsg(`${t('system.private_message_failed', 'Cannot send private message to')} ${rd.privateChatTargetName}. ${t('system.user_not_connected', 'User might not be fully connected.')}`)
 					}
 				} else {
-					// 公共频道消息发送
+					// 公開頻道訊息傳送
 					// Send public message
 					rd.chat.sendChannelMessage('text', text);
 					addMsg(text);				}
 			}
 			
-			// 清空输入框并触发 input 事件
+			// 清空輸入框並觸發 input 事件
 			// Clear input and trigger input event
-			input.innerHTML = ''; // 清空输入框内容 / Clear input field content
+			input.innerHTML = ''; // 清空輸入框內容 / Clear input field content
 			if (imagePasteHandler && typeof imagePasteHandler.refreshPlaceholder === 'function') {
-				imagePasteHandler.refreshPlaceholder(); // 更新 placeholder 状态
+				imagePasteHandler.refreshPlaceholder(); // 更新 placeholder 狀態
 			}
-			autoGrowInput(); // 调整输入框高度
+			autoGrowInput(); // 調整輸入框高度
 		}
 	}
 	
-	// 为发送按钮添加点击事件
+	// 為傳送按鈕新增點擊事件
 	// Add click event for send button
 	const sendButton = document.querySelector('.send-message-btn');
 	if (sendButton) {
 		sendButton.addEventListener('click', sendMessage);
 	}
 	
-	// 设置发送文件功能
+	// 設定傳送檔案功能
 	// Setup file sending functionality
 	setupFileSend({
-		inputSelector: '.input-message-input', // 消息输入框选择器 / Message input selector
-		attachBtnSelector: '.chat-attach-btn', // 附件按钮选择器 / Attach button selector
-		fileInputSelector: '.new-message-wrapper input[type="file"]', // 文件输入框选择器 / File input selector
+		inputSelector: '.input-message-input', // 訊息輸入框選擇器 / Message input selector
+		attachBtnSelector: '.chat-attach-btn', // 附件按鈕選擇器 / Attach button selector
+		fileInputSelector: '.new-message-wrapper input[type="file"]', // 檔案輸入框選擇器 / File input selector
 		onSend: (message) => {
 			const rd = roomsData[activeRoomIndex];
 			if (rd && rd.chat) {
 				const userName = rd.myUserName || '';
 				const msgWithUser = { ...message, userName };
 				if (rd.privateChatTargetId) {
-					// 私聊文件加密并发送
+					// 私訊檔案加密並傳送
 					// Encrypt and send private file message
 					const targetClient = rd.chat.channel[rd.privateChatTargetId];
 					if (targetClient && targetClient.shared) {
@@ -306,18 +313,18 @@ window.addEventListener('DOMContentLoaded', () => {
 						const encryptedMessageForServer = rd.chat.encryptServerMessage(serverRelayPayload, rd.chat.serverShared);
 						rd.chat.sendMessage(encryptedMessageForServer);
 						
-						// 添加到自己的聊天记录
+						// 新增到自己的聊天紀錄
 						if (msgWithUser.type === 'file_start') {
 							addMsg(msgWithUser, false, 'file_private');
 						}					} else {
 						addSystemMsg(`${t('system.private_file_failed', 'Cannot send private file to')} ${rd.privateChatTargetName}. ${t('system.user_not_connected', 'User might not be fully connected.')}`)
 					}
 				} else {
-					// 公共频道文件发送
+					// 公開頻道檔案傳送
 					// Send file to public channel
 					rd.chat.sendChannelMessage(msgWithUser.type, msgWithUser);
 					
-					// 添加到自己的聊天记录
+					// 新增到自己的聊天紀錄
 					if (msgWithUser.type === 'file_start') {
 						addMsg(msgWithUser, false, 'file');
 					}
@@ -326,11 +333,11 @@ window.addEventListener('DOMContentLoaded', () => {
 	});
 
 
-	// 判断是否为移动端
+	// 判斷是否為行動裝置
 	// Check if the device is mobile
 	const isMobile = () => window.innerWidth <= 768;
 
-	// 渲染主界面元素
+	// 渲染主介面元素
 	// Render main UI elements
 	renderMainHeader();
 	renderUserList();
@@ -342,7 +349,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	const sidebarMask = $id('mobile-sidebar-mask');
 	const rightbarMask = $id('mobile-rightbar-mask');
 
-	// 在移动端点击房间列表后关闭侧边栏
+	// 在行動裝置點擊房間清單後關閉側邊欄
 	// On mobile, clicking room list closes sidebar
 	if (roomList) {
 		roomList.addEventListener('click', () => {
@@ -353,7 +360,7 @@ window.addEventListener('DOMContentLoaded', () => {
 		});
 	}
 
-	// 在移动端点击成员标签后关闭右侧面板
+	// 在行動裝置點擊成員標籤後關閉右側欄
 	// On mobile, clicking member tabs closes right panel
 	const memberTabs = $id('member-tabs');
 	if (memberTabs) {
@@ -367,17 +374,17 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // Listen for language change events
-// 监听语言切换事件
+// 監聽語言切換事件
 window.addEventListener('languageChange', (event) => {
 	updateStaticTexts();
 });
 
-// 全局拖拽文件自动打开附件功能
+// 全域拖曳檔案自動開啟附件功能
 // Global drag file to auto trigger attach button
 let dragCounter = 0;
 let hasTriggeredAttach = false;
 
-// 监听文件上传模态框关闭事件，重置拖拽标志位
+// 監聽檔案上傳對話框關閉事件，重置拖曳標誌位
 window.addEventListener('fileUploadModalClosed', () => {
 	hasTriggeredAttach = false;
 });
@@ -385,10 +392,10 @@ window.addEventListener('fileUploadModalClosed', () => {
 document.addEventListener('dragenter', (e) => {
 	dragCounter++;
 	if (!hasTriggeredAttach && e.dataTransfer.items.length > 0) {
-		// 检查是否有文件
+		// 檢查是否有檔案
 		for (let item of e.dataTransfer.items) {
 			if (item.kind === 'file') {
-				// 自动点击附件按钮
+				// 自動點擊附件按鈕
 				const attachBtn = document.querySelector('.chat-attach-btn');
 				if (attachBtn) {
 					attachBtn.click();

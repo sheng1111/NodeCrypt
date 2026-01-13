@@ -1,5 +1,5 @@
-// Room management logic for NodeCrypt web client
-// NodeCrypt 网页客户端的房间管理逻辑
+﻿// Room management logic for NodeCrypt web client
+// NodeCrypt 網頁用戶端的房間管理邏輯
 
 import {
 	createAvatarSVG
@@ -25,7 +25,7 @@ let roomsData = [];
 let activeRoomIndex = -1;
 
 // Get a new room data object
-// 获取一个新的房间数据对象
+// 取得一個新的房間資料物件
 export function getNewRoomData() {
 	return {
 		roomName: '',
@@ -44,7 +44,7 @@ export function getNewRoomData() {
 }
 
 // Switch to another room by index
-// 切换到指定索引的房间
+// 切換到指定索引的房間
 export function switchRoom(index) {
 	if (index < 0 || index >= roomsData.length) return;
 	activeRoomIndex = index;
@@ -61,7 +61,7 @@ export function switchRoom(index) {
 }
 
 // Set the sidebar avatar
-// 设置侧边栏头像
+// 設定側邊欄頭像
 export function setSidebarAvatar(userName) {
 	if (!userName) return;
 	const svg = createAvatarSVG(userName);
@@ -73,7 +73,7 @@ export function setSidebarAvatar(userName) {
 }
 
 // Render the room list
-// 渲染房间列表
+// 渲染房間清單
 export function renderRooms(activeId = 0) {
 	const roomList = $id('room-list');
 	roomList.innerHTML = '';
@@ -93,7 +93,7 @@ export function renderRooms(activeId = 0) {
 }
 
 // Join a room
-// 加入一个房间
+// 加入一個房間
 export function joinRoom(userName, roomName, password, modal = null, onResult) {
 	const newRd = getNewRoomData();
 	newRd.roomName = roomName;
@@ -113,7 +113,8 @@ export function joinRoom(userName, roomName, password, modal = null, onResult) {
 				closed = true;
 				onResult(false)
 			}
-		},		onServerSecured: () => {
+		},
+		onServerSecured: () => {
 			if (modal) modal.remove();
 			else {
 				const loginContainer = $id('login-container');
@@ -141,7 +142,7 @@ export function joinRoom(userName, roomName, password, modal = null, onResult) {
 }
 
 // Handle the client list update
-// 处理客户端列表更新
+// 處理用戶端清單更新
 export function handleClientList(idx, list, selfId) {
 	const rd = roomsData[idx];
 	if (!rd) return;
@@ -170,7 +171,7 @@ export function handleClientList(idx, list, selfId) {
 }
 
 // Handle client secured event
-// 处理客户端安全连接事件
+// 處理用戶端安全連線事件
 export function handleClientSecured(idx, user) {
 	const rd = roomsData[idx];
 	if (!rd) return;
@@ -190,7 +191,8 @@ export function handleClientSecured(idx, user) {
 	}
 	const isNew = !rd.knownUserIds.has(user.clientId);
 	if (isNew) {
-		rd.knownUserIds.add(user.clientId);		const name = user.userName || user.username || user.name || t('ui.anonymous', 'Anonymous');
+		rd.knownUserIds.add(user.clientId);
+		const name = user.userName || user.username || user.name || t('ui.anonymous', 'Anonymous');
 		const msg = `${name} ${t('system.joined', 'joined the conversation')}`;
 		rd.messages.push({
 			type: 'system',
@@ -204,7 +206,7 @@ export function handleClientSecured(idx, user) {
 }
 
 // Handle client left event
-// 处理客户端离开事件
+// 處理用戶端離開事件
 export function handleClientLeft(idx, clientId) {
 	const rd = roomsData[idx];
 	if (!rd) return;
@@ -232,7 +234,7 @@ export function handleClientLeft(idx, clientId) {
 }
 
 // Handle client message event
-// 处理客户端消息事件
+// 處理用戶端訊息事件
 export function handleClientMessage(idx, msg) {
 	const newRd = roomsData[idx];
 	if (!newRd) return;
@@ -338,7 +340,7 @@ export function handleClientMessage(idx, msg) {
 }
 
 // Toggle private chat with a user
-// 切换与某用户的私聊
+// 切換與某使用者的私訊
 export function togglePrivateChat(targetId, targetName) {
 	const rd = roomsData[activeRoomIndex];
 	if (!rd) return;
@@ -355,7 +357,7 @@ export function togglePrivateChat(targetId, targetName) {
 
 
 // Exit the current room
-// 退出当前房间
+// 退出目前房間
 export function exitRoom() {
 	if (activeRoomIndex >= 0 && roomsData[activeRoomIndex]) {
 		const chatInst = roomsData[activeRoomIndex].chat;
@@ -379,7 +381,7 @@ export function exitRoom() {
 export { roomsData, activeRoomIndex };
 
 // Listen for sidebar username update event
-// 监听侧边栏用户名更新事件
+// 監聽側邊欄使用者名稱更新事件
 window.addEventListener('updateSidebarUsername', () => {
 	if (activeRoomIndex >= 0 && roomsData[activeRoomIndex]) {
 		const rd = roomsData[activeRoomIndex];

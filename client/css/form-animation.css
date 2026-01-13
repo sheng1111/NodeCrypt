@@ -1,4 +1,4 @@
-/* 浮动标签动画样式 */
+﻿/* 浮動標籤動畫樣式 */
 .input-group {
   position: relative;
 }
@@ -15,7 +15,7 @@
 
 .input-group input:focus + .floating-label,
 .input-group input:not(:placeholder-shown) + .floating-label {
-  color: #30a8f7;
+  color: #06c755;
   transform: translateY(-40px);
 }
 
